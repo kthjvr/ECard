@@ -118,7 +118,7 @@ class BirthdayInvitationController {
                     block: 'center'
                 });
             }
-        }, 1800);
+        }, 1200);
     }
 
     // Birthday Confetti Effect
@@ -356,6 +356,16 @@ class BirthdayInvitationController {
         switch (platform) {
             case 'facebook':
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
+                break;
+            case 'messenger':
+                FB.ui({method: 'send', link: shareUrl,}, 
+                    function(response){
+                        if(response) {
+                            console.log('Shared successfully!');
+                        } else {
+                            console.log('Share canceled or failed.');
+                        }
+                    });
                 break;
             case 'copy':
                 const fullText = `${shareText}\n${shareUrl}`;

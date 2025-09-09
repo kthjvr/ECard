@@ -145,10 +145,13 @@
         <span class="close" id="closeShareModal">&times;</span>
         <h3>📤 Share this Invitation</h3>
         <div class="share-options">
-          <button class="share-option" data-platform="facebook">
-            <span>📘</span> Facebook
+          <button type="button" class="share-option" data-platform="facebook">
+            <span>👥</span> Facebook
           </button>
-          <button class="share-option" data-platform="copy">
+          <button type="button" class="share-option" data-platform="messenger">
+            <span>✉️</span> Messenger
+          </button>
+          <button type="button" class="share-option" data-platform="copy">
             <span>📋</span> Copy Link
           </button>
         </div>
@@ -160,6 +163,21 @@
   <audio id="bgMusic" loop>
     <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mpeg">
   </audio>
+
+  <!-- Facebook ID Init -->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous" 
+    src="https://connect.facebook.net/en_US/sdk.js"></script>
+  <script>
+    window.fbAsyncInit = function() {
+      FB.init({
+        appId      : 'Y1303117744941492',
+        xfbml      : true,
+        version    : 'v16.0'
+      });
+    };
+  </script>
+
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
