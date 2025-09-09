@@ -469,6 +469,31 @@ class BirthdayInvitationController {
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     new BirthdayInvitationController();
+
+    const galleryImages = document.querySelectorAll('.dress-code-gallery img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeBtn = document.querySelector('.lightbox .close');
+
+    // Open on image click
+    galleryImages.forEach(img => {
+    img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+        lightboxImg.alt = img.alt;
+    });
+    });
+
+    closeBtn.addEventListener('click', () => {
+    lightbox.style.display = 'none';
+    });
+
+    // Close when clicking outside the image
+    lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+        lightbox.style.display = 'none';
+    }
+    });
 });
 
 // Add notification animations

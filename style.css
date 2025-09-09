@@ -472,6 +472,56 @@ body::-webkit-scrollbar {
     font-size: 0.9rem;
 }
 
+/* Dress Code */
+.dress-code-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.dress-code-gallery img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.dress-code-gallery img:hover {
+  transform: scale(1.1);
+}
+
+/* Overlay for photo */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-content {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+.lightbox .close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+
 /* Countdown Section */
 .countdown-section {
     text-align: center;
@@ -830,6 +880,11 @@ textarea:focus {
 
     .share-options {
         grid-template-columns: 1fr;
+    }
+
+    .dress-code-gallery img {
+        width: 90px;
+        height: 90px;
     }
 }
 
