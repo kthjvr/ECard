@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexa's Birthday Invitation</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="spinner"></div>
+    <p>Preparing a surprise...</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="balloons-container" id="balloonsContainer"></div>
+
+    <!-- Header  -->
+    <div class="header-section">
+    <img src="image.jpg" alt="Birthday Banner" class="header-image">
+
+    <h1 class="animated-title">✨ It's Alexa's Birthday! ✨</h1>
+    <p class="subtitle">Tap the envelope below to reveal your party invitation</p>
+    <div class="pulse-indicator">👆</div>
+    </div>
+
+
+    <!-- Interactive Envelope -->
+     <div class="envelope-container">
+        <div class="wrapper" id="envelope">
+        <div class="lid one" id="lid1"></div>
+        <div class="lid two" id="lid"></div>
+        <div class="envelope"></div>
+        <div class="letter" id="letter">
+            <p>You're invited! Come ready to party!</p>
+        </div>
+        </div>
+     </div>
+
+    <!-- Invitation Details Card -->
+    <div class="invitation-card" id="inviteDetails">
+      <div class="card-header">
+        <h2>🎂 Aexa's Birthday Celebration</h2>
+        <!-- <div class="celebration-icons">🎈 🍰 🎁 🎊</div> -->
+      </div>
+      
+      <div class="event-details">
+        <div class="detail-item">
+          <span class="icon">📅</span>
+          <div>
+            <strong>Date & Time:</strong>
+            <p>November 02, 2025 at 02:00 PM</p>
+          </div>
+        </div>
+        
+        <div class="detail-item">
+          <span class="icon">📍</span>
+          <div>
+            <strong>Location:</strong>
+            <p>Test Location<br>
+            <small>123 Test, Location</small></p>
+          </div>
+        </div>
+        
+        <div class="detail-item">
+          <span class="icon">🎨</span>
+          <div>
+            <strong>Dress Code:</strong>
+            <p>Casual & Colorful</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="countdown-section">
+        <h3>⏰ Countdown to the Party!</h3>
+        <div class="countdown" id="countdown">
+          <div class="time-unit">
+            <span class="number" id="days">00</span>
+            <span class="label">Days</span>
+          </div>
+          <div class="time-unit">
+            <span class="number" id="hours">00</span>
+            <span class="label">Hours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="rsvp-btn primary" id="rsvpBtn">
+          <span class="btn-icon">📝</span>
+          RSVP Now
+        </button>
+        <button class="share-btn secondary" id="shareBtn">
+          <span class="btn-icon">📤</span>
+          Share Invite
+        </button>
+      </div>
+
+      <div class="special-message">
+        <p>🎈 <em>Can't wait to celebrate with you!</em> 🎈</p>
+      </div>
+    </div>
+
+    <!-- Music Controls -->
+    <div class="music-controls" id="musicControls">
+      <button class="music-btn" id="musicBtn">
+        <span class="music-icon">🎵</span>
+      </button>
+    </div>
+
+    <!-- RSVP Modal -->
+    <div class="modal" id="rsvpModal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">&times;</span>
+        <h3>🎉 RSVP for the Party!</h3>
+        <iframe 
+        src="https://forms.gle/7LHwd712pTA6szyi7" 
+        width="100%" height="500" frameborder="0" marginheight="0" marginwidth="0">
+        Loading…
+        </iframe>
+    </div>
+    </div>
+
+
+    <!-- Share Modal -->
+    <div class="modal" id="shareModal">
+      <div class="modal-content">
+        <span class="close" id="closeShareModal">&times;</span>
+        <h3>📤 Share this Invitation</h3>
+        <div class="share-options">
+          <button class="share-option" data-platform="facebook">
+            <span>📘</span> Facebook
+          </button>
+          <button class="share-option" data-platform="copy">
+            <span>📋</span> Copy Link
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.bensound.com/bensound-music/bensound-buddy.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    const wrapper = document.getElementById('envelope');
+const letter = document.getElementById('letter');
+
+wrapper.addEventListener('click', () => {
+  wrapper.classList.add('open');
+  setTimeout(() => {
+    letter.classList.add('visible');
+  }, 500);
+});
+
+  </script>
+</body>
+</html>
