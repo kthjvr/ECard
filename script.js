@@ -358,7 +358,7 @@ class BirthdayInvitationController {
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
                 break;
             case 'messenger':
-                FB.ui({method: 'send', link: shareUrl,}, 
+                FB.ui({method: 'send', link: 'https://alexabirthdayinvitation.netlify.app/',}, 
                     function(response){
                         if(response) {
                             console.log('Shared successfully!');
