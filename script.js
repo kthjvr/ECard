@@ -358,14 +358,19 @@ class BirthdayInvitationController {
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
                 break;
             case 'messenger':
-                FB.ui({method: 'send', link: 'https://alexabirthdayinvitation.netlify.app/',}, 
-                    function(response){
-                        if(response) {
-                            console.log('Shared successfully!');
-                        } else {
-                            console.log('Share canceled or failed.');
-                        }
-                    });
+                const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+                const displayType = isMobile ? 'touch' : 'popup';
+                FB.ui({
+                    method: 'send',
+                    link: shareUrl,
+                    display: displayType
+                }, function(response){
+                    if(response){
+                        console.log('Shared successfully!');
+                    } else {
+                        console.log('Share canceled or failed.');
+                    }
+                });
                 break;
             case 'copy':
                 const fullText = `${shareText}\n${shareUrl}`;
