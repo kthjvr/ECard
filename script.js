@@ -189,14 +189,23 @@ class BirthdayInvitationController {
 
     // Floating Confetti Animation
     startFloatingBalloons() {
+        const MAX_CONFETTI = 100;
+        let currentConfetti = 0;
+
         const createConfetti = () => {
+            if(currentConfetti >= MAX_CONFETTI) return;
+            currentConfetti++;
+
             const piece = document.createElement('div');
             piece.className = 'floating-confetti';
             piece.style.left = Math.random() * 100 + '%';
             piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
             document.getElementById('balloonsContainer').appendChild(piece);
 
-            setTimeout(() => piece.remove(), 6000);
+            setTimeout(() => {
+                piece.remove();
+                currentConfetti--;
+            }, 6000);
         };
 
         setInterval(createConfetti, 300);
