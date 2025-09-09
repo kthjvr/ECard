@@ -187,21 +187,21 @@ class BirthdayInvitationController {
         }, 2000);
     }
 
-    // Floating Balloons Animation
+    // Floating Confetti Animation
     startFloatingBalloons() {
         const createConfetti = () => {
-        const piece = document.createElement('div');
-        piece.className = 'floating-confetti';
-        piece.style.left = Math.random() * 100 + '%';
-        piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
-        document.getElementById('balloonsContainer').appendChild(piece);
+            const piece = document.createElement('div');
+            piece.className = 'floating-confetti';
+            piece.style.left = Math.random() * 100 + '%';
+            piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
+            document.getElementById('balloonsContainer').appendChild(piece);
 
-        setTimeout(() => piece.remove(), 6000);
+            setTimeout(() => piece.remove(), 6000);
         };
 
         setInterval(createConfetti, 300);
 
-        // Initial balloons
+        // Initial Confetti
         for (let i = 0; i < 3; i++) {
             setTimeout(createConfetti, i * 800);
         }
