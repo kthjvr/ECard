@@ -118,7 +118,7 @@ class BirthdayInvitationController {
                     block: 'center'
                 });
             }
-        }, 2200);
+        }, 1800);
     }
 
     // Birthday Confetti Effect
@@ -350,7 +350,7 @@ class BirthdayInvitationController {
     }
 
     handleShare(platform) {
-        const shareText = "🎉 You're invited to my Birthday Party! 🎂 Come join the celebration!";
+        const shareText = "💌 Hey! I’ve got a surprise invitation for you. Open the link 🎉";
         const shareUrl = window.location.href;
 
         switch (platform) {
@@ -358,7 +358,8 @@ class BirthdayInvitationController {
                 window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`);
                 break;
             case 'copy':
-                this.copyToClipboard(shareUrl);
+                const fullText = `${shareText}\n${shareUrl}`;
+                this.copyToClipboard(fullText);
                 break;
         }
 
