@@ -1,4 +1,3 @@
-
 class BirthdayInvitationController {
     constructor() {
         this.isEnvelopeOpened = false;
@@ -6,11 +5,19 @@ class BirthdayInvitationController {
         this.countdownInterval = null;
         this.giftBoxState = null;
         this.currentPage = 0;
-
+        this.floatingConfettiInterval = null;
+        this.currentConfettiCount = 0;
+        
+        this.rafId = null;
+        this.isAnimating = false;
+        this.throttledResize = this.throttle(this.handleResize.bind(this), 250);
+        this.elements = {};
+        
         this.init();
     }
 
     init() {
+        this.cacheElements();
         this.setupLoadingScreen();
         this.setupEventListeners();
         this.setupCountdown();
@@ -18,126 +25,140 @@ class BirthdayInvitationController {
         this.setupTouchSupport();
     }
 
-    // Loading Screen Management
-    setupLoadingScreen() {
-        const loadingScreen = document.getElementById('loadingScreen');
-        const mainContent = document.getElementById('mainContent');
-
-        setTimeout(() => {
-            loadingScreen.classList.add('hidden');
-            mainContent.classList.add('visible');
-
-            setTimeout(() => {
-                loadingScreen.remove();
-            }, 500);
-        }, 2500);
+    // Cache frequently used DOM elements
+    cacheElements() {
+        const elementIds = [
+            'loadingScreen', 'mainContent', 'envelope', 'lid', 'letter', 
+            'lid1', 'storybook', 'inviteDetails', 'musicBtn', 'rsvpBtn', 
+            'shareBtn', 'openSound', 'bgMusic', 'rsvpModal', 'shareModal',
+            'closeModal', 'closeShareModal', 'progressBar', 'giftBoxBtn',
+            'giftBoxLid', 'jumpCharacter', 'days', 'hours', 'balloonsContainer'
+        ];
+        
+        elementIds.forEach(id => {
+            this.elements[id] = document.getElementById(id);
+        });
     }
 
-    // Event Listeners Setup
+    // Loading Screen
+    setupLoadingScreen() {
+        const { loadingScreen, mainContent } = this.elements;
+        
+        const showMainContent = () => {
+            loadingScreen.classList.add('hidden');
+            mainContent.classList.add('visible');
+            
+            this.rafId = requestAnimationFrame(() => {
+                setTimeout(() => {
+                    if (loadingScreen.parentNode) {
+                        loadingScreen.remove();
+                    }
+                }, 500);
+            });
+        };
+        
+        setTimeout(showMainContent, 2500);
+    }
+
+    //  Event Listeners Setup
     setupEventListeners() {
-        // Envelope click handler
-        const envelope = document.getElementById('envelope');
-        envelope.addEventListener('click', () => this.openEnvelope());
+        const { envelope, musicBtn, rsvpBtn, shareBtn } = this.elements;
+        
+        // Use passive listeners where possible
+        envelope.addEventListener('click', this.openEnvelope.bind(this), { passive: true });
+        envelope.addEventListener('keydown', this.handleEnvelopeKeydown.bind(this));
+        
+        musicBtn.addEventListener('click', this.toggleMusic.bind(this), { passive: true });
+        rsvpBtn.addEventListener('click', this.openRSVPModal.bind(this), { passive: true });
+        shareBtn.addEventListener('click', this.openShareModal.bind(this), { passive: true });
 
-        // Keyboard support for envelope
-        envelope.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                this.openEnvelope();
-            }
-        });
-
-        // Music controls
-        const musicBtn = document.getElementById('musicBtn');
-        musicBtn.addEventListener('click', () => this.toggleMusic());
-
-        // RSVP button
-        const rsvpBtn = document.getElementById('rsvpBtn');
-        rsvpBtn.addEventListener('click', () => this.openRSVPModal());
-
-        // Share button
-        const shareBtn = document.getElementById('shareBtn');
-        shareBtn.addEventListener('click', () => this.openShareModal());
-
-        // Modal controls
         this.setupModals();
-
-        // Share options
         this.setupShareHandlers();
 
-        // Window events
-        window.addEventListener('resize', () => this.handleResize());
-        window.addEventListener('beforeunload', () => this.cleanup());
+        // Use throttled resize handler
+        window.addEventListener('resize', this.throttledResize, { passive: true });
+        window.addEventListener('beforeunload', this.cleanup.bind(this));
+    }
+
+    handleEnvelopeKeydown(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            this.openEnvelope();
+        }
     }
 
     // Envelope Opening
     openEnvelope() {
-        if (this.isEnvelopeOpened) return;
+        if (this.isEnvelopeOpened || this.isAnimating) return;
 
+        this.isAnimating = true;
         this.isEnvelopeOpened = true;
-        const envelope = document.getElementById('envelope');
-        const lid = document.getElementById('lid');
-        const letter = document.getElementById('letter');
-        const openSound = document.getElementById('openSound');
-        const lidOne = document.getElementById('lid1');
-        const storybookSection = document.getElementById('storybook');
-
-        if (lidOne) {
-            lidOne.style.display = 'none';
-        }
-
+        
+        const { envelope, lid, letter, openSound, lid1, storybook } = this.elements;
+        if (lid1) lid1.style.display = 'none';
+        
         // Disable envelope interaction
         envelope.style.pointerEvents = 'none';
+        this.playSound(openSound);
+        this.animateEnvelopeOpening(lid, letter, storybook);
+    }
 
-        // Play opening sound
-        if (openSound) {
-            openSound.play().catch(() => {
-                console.log('Audio play failed - user interaction required');
-            });
-        }
-
+    animateEnvelopeOpening(lid, letter, storybook) {
         // Animate flap opening
         lid.classList.add('opened');
-
-        // Animate letter appearance
         setTimeout(() => {
             letter.classList.add('visible');
         }, 500);
 
-        // Show story book
         setTimeout(() => {
-            storybookSection.classList.add('visible');
+            storybook.classList.add('visible');
             this.showStoryBook();
-
-            // Auto-play music after interaction
             this.startMusic();
-
-            // Scroll to invitation card on mobile
-            storybookSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            window.scrollBy({ top: 800, behavior: 'smooth' });
-
+            this.smoothScrollToStorybook(storybook);
+            this.isAnimating = false;
         }, 1200);
     }
 
-    showInvitationAfterStory() {
-        const inviteDetails = document.getElementById('inviteDetails');
+    smoothScrollToStorybook(storybook) {
+        this.rafId = requestAnimationFrame(() => {
+            storybook.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                window.scrollBy({ top: 800, behavior: 'smooth' });
+            }, 100);
+        });
+    }
 
+    playSound(audioElement) {
+        if (audioElement) {
+            audioElement.play().catch(() => {
+                console.log('Audio play failed - user interaction required');
+            });
+        }
+    }
+
+    showInvitationAfterStory() {
+        const { inviteDetails } = this.elements;
+        
         setTimeout(() => {
             inviteDetails.classList.add('visible');
-
-            if (window.innerWidth <= 768) {
-                const elementTop = inviteDetails.getBoundingClientRect().top + window.scrollY;
-                const offset = 120;
-                window.scrollTo({
-                    top: elementTop - offset,
-                    behavior: 'smooth'
-                });
-            }
+            setTimeout(() => {
+                window.scrollBy({ top: 800, behavior: 'smooth' });
+            }, 100);
         }, 1000);
     }
 
+    smoothScrollToElement(element, offset = 0) {
+        this.rafId = requestAnimationFrame(() => {
+            const elementTop = element.getBoundingClientRect().top + window.scrollY;
+            window.scrollTo({
+                top: elementTop - offset,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    //  Story Book
     showStoryBook() {
-        // Gift Box Animation State
         const initState = {
             move: "move",
             jump: "",
@@ -145,7 +166,6 @@ class BirthdayInvitationController {
             rotating: ""
         };
 
-        // Initialize propertues
         if (!this.giftBoxState) {
             this.giftBoxState = { ...initState };
         }
@@ -153,86 +173,64 @@ class BirthdayInvitationController {
             this.currentPage = 0;
         }
 
+        // cache DOM queries
         const pages = document.querySelectorAll('.page');
         const totalPages = pages.length;
-        const progressBar = document.getElementById('progressBar');
-        const giftBoxBtn = document.getElementById('giftBoxBtn');
-        const giftBoxLid = document.getElementById('giftBoxLid');
-        const jumpCharacter = document.getElementById('jumpCharacter');
-        const self = this;
+        const { progressBar, giftBoxBtn, giftBoxLid, jumpCharacter } = this.elements;
 
-        // Gift Box Animation Functions
-        function updateGiftBoxState(newState) {
-            self.giftBoxState = { ...self.giftBoxState, ...newState };
-            applyGiftBoxClasses();
-        }
+        // gift box functions
+        const updateGiftBoxState = (newState) => {
+            this.giftBoxState = { ...this.giftBoxState, ...newState };
+            this.applyGiftBoxClasses(giftBoxLid, jumpCharacter);
+        };
 
-        function applyGiftBoxClasses() {
-            const { move, jump, rotated, rotating } = self.giftBoxState;
-
-            // Apply classes to gift-lid
-            if (giftBoxLid) {
-                giftBoxLid.className = `gift-lid ${move} ${rotating} ${rotated}`.trim();
-            }
-
-            // Apply jump class to character
-            if (jumpCharacter) {
-                jumpCharacter.className = `jump-character ${jump}`.trim();
-            }
-        }
-
-        function animateGiftBox() {
-            const isDone = self.giftBoxState.rotated === "rotated";
+        const animateGiftBox = () => {
+            const isDone = this.giftBoxState.rotated === "rotated";
 
             if (!isDone) {
                 updateGiftBoxState({ rotating: "rotating" });
 
                 setTimeout(() => {
                     updateGiftBoxState({ jump: "jump" });
-                    self.triggerBirthdayConfetti?.();
+                    this.triggerBirthdayConfetti();
                 }, 300);
 
                 setTimeout(() => {
                     updateGiftBoxState({ rotated: "rotated" });
                     nextPage();
-
-                    setTimeout(() => {
-                        closeGiftBox();
-                    }, 1300);
+                    setTimeout(closeGiftBox, 1300);
                 }, 1000);
             } else {
                 updateGiftBoxState(initState);
                 nextPage();
             }
 
-            const moving = self.giftBoxState.move === "move" ? "" : "move";
+            const moving = this.giftBoxState.move === "move" ? "" : "move";
             updateGiftBoxState({ move: moving });
-        }
+        };
 
-        function closeGiftBox() {
-            if (self.giftBoxState.rotated === "rotated") {
+        const closeGiftBox = () => {
+            if (this.giftBoxState.rotated === "rotated") {
                 updateGiftBoxState({ jump: "" });
 
                 if (giftBoxLid) {
                     giftBoxLid.style.animation = "rotating-back 0.7s ease-out forwards";
-
                     setTimeout(() => {
                         updateGiftBoxState(initState);
                         giftBoxLid.style.animation = "";
                     }, 700);
                 }
             }
-        }
+        };
 
-        // Storybook Functions
-        function updateProgress() {
+        const updateProgress = () => {
             if (progressBar) {
-                const progress = (self.currentPage / (totalPages - 1)) * 100;
+                const progress = (this.currentPage / (totalPages - 1)) * 100;
                 progressBar.style.width = progress + '%';
             }
-        }
+        };
 
-        function showPage(pageIndex) {
+        const showPage = (pageIndex) => {
             pages.forEach((page, index) => {
                 page.classList.remove('active', 'prev');
                 if (index === pageIndex) {
@@ -242,25 +240,25 @@ class BirthdayInvitationController {
                 }
             });
             updateProgress();
-        }
+        };
 
-        function nextPage() {
-            self.currentPage = (self.currentPage + 1) % totalPages;
-            showPage(self.currentPage);
+        const nextPage = () => {
+            this.currentPage = (this.currentPage + 1) % totalPages;
+            showPage(this.currentPage);
 
-            // Check if we've reached the last page
-            if (self.currentPage === totalPages - 1) {
+            if (this.currentPage === totalPages - 1) {
                 setTimeout(() => {
-                    self.showInvitationAfterStory();
+                    this.showInvitationAfterStory();
                 }, 1000);
             }
-        }
+        };
 
+        // event listener setup
         if (giftBoxBtn && !giftBoxBtn.hasAttribute('data-listener-added')) {
             giftBoxBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 animateGiftBox();
-            });
+            }, { passive: true });
             giftBoxBtn.setAttribute('data-listener-added', 'true');
         }
 
@@ -268,52 +266,65 @@ class BirthdayInvitationController {
         if (totalPages > 0) {
             showPage(0);
             updateProgress();
-            applyGiftBoxClasses();
+            this.applyGiftBoxClasses(giftBoxLid, jumpCharacter);
         }
     }
 
-    // Birthday Confetti Effect
+    // gift box class application
+    applyGiftBoxClasses(giftBoxLid, jumpCharacter) {
+        const { move, jump, rotated, rotating } = this.giftBoxState;
+
+        if (giftBoxLid) {
+            giftBoxLid.className = `gift-lid ${move} ${rotating} ${rotated}`.trim();
+        }
+
+        if (jumpCharacter) {
+            jumpCharacter.className = `jump-character ${jump}`.trim();
+        }
+    }
+
+    // Birthday Confetti
     triggerBirthdayConfetti() {
+        if (!window.confetti) return;
+        
         const duration = 4000;
         const animationEnd = Date.now() + duration;
         const colors = ['#ff6b35', '#ffd23f', '#4ecdc4', '#45b7d1', '#fd79a8', '#6c5ce7'];
 
-        // Multiple confetti bursts with birthday colors
-        const interval = setInterval(() => {
+        const confettiInterval = setInterval(() => {
             const timeLeft = animationEnd - Date.now();
 
             if (timeLeft <= 0) {
-                clearInterval(interval);
+                clearInterval(confettiInterval);
                 return;
             }
 
-            const particleCount = 70 * (timeLeft / duration);
-
-            // Left side burst
-            confetti({
-                particleCount,
-                startVelocity: 35,
-                spread: 70,
-                origin: { x: this.randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
-                colors: colors,
-                shapes: ['circle', 'square'],
-                ticks: 80
-            });
-
-            // Right side burst
-            confetti({
-                particleCount,
-                startVelocity: 35,
-                spread: 70,
-                origin: { x: this.randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
-                colors: colors,
-                shapes: ['circle', 'square'],
-                ticks: 80
-            });
+            const particleCount = Math.floor(70 * (timeLeft / duration));
+            this.createConfettiBurst(particleCount, colors, 0.1, 0.3);
+            this.createConfettiBurst(particleCount, colors, 0.7, 0.9);
         }, 250);
 
-        // Special birthday cake confetti
-        setTimeout(() => {
+        // Delayed special effects
+        setTimeout(() => this.createSpecialConfetti(colors), 1000);
+        setTimeout(() => this.createBalloonBurst(colors), 2000);
+    }
+
+    createConfettiBurst(particleCount, colors, minX, maxX) {
+        if (window.confetti) {
+            confetti({
+                particleCount,
+                startVelocity: 35,
+                spread: 70,
+                origin: { x: this.randomInRange(minX, maxX), y: Math.random() - 0.2 },
+                colors: colors,
+                shapes: ['circle', 'square'],
+                ticks: 80
+            });
+        }
+    }
+
+    createSpecialConfetti(colors) {
+        if (window.confetti) {
             confetti({
                 particleCount: 100,
                 spread: 100,
@@ -323,10 +334,11 @@ class BirthdayInvitationController {
                 startVelocity: 45,
                 gravity: 0.8
             });
-        }, 1000);
+        }
+    }
 
-        // Final balloon burst
-        setTimeout(() => {
+    createBalloonBurst(colors) {
+        if (window.confetti) {
             confetti({
                 particleCount: 50,
                 spread: 60,
@@ -335,46 +347,50 @@ class BirthdayInvitationController {
                 colors: ['#4ecdc4', '#45b7d1', '#6c5ce7'],
                 startVelocity: 25
             });
-        }, 2000);
+        }
     }
 
-    // Floating Confetti Animation
+    // Floating Confetti with performance limits
     startFloatingBalloons() {
-        const MAX_CONFETTI = 100;
-        let currentConfetti = 0;
+        const MAX_CONFETTI = 50;
+        const { balloonsContainer } = this.elements;
+        
+        if (!balloonsContainer) return;
 
         const createConfetti = () => {
-            if (currentConfetti >= MAX_CONFETTI) return;
-            currentConfetti++;
-
+            if (this.currentConfettiCount >= MAX_CONFETTI) return;
+            
+            this.currentConfettiCount++;
             const piece = document.createElement('div');
             piece.className = 'floating-confetti';
             piece.style.left = Math.random() * 100 + '%';
             piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
-            document.getElementById('balloonsContainer').appendChild(piece);
+            
+            balloonsContainer.appendChild(piece);
 
             setTimeout(() => {
-                piece.remove();
-                currentConfetti--;
+                if (piece.parentNode) {
+                    piece.remove();
+                    this.currentConfettiCount--;
+                }
             }, 6000);
         };
 
-        setInterval(createConfetti, 300);
-
-        // Initial Confetti
-        for (let i = 0; i < 3; i++) {
+        this.floatingConfettiInterval = setInterval(createConfetti, 500);
+        for (let i = 0; i < 2; i++) {
             setTimeout(createConfetti, i * 800);
         }
     }
 
-    // Countdown Timer
+    // Countdown
     setupCountdown() {
         const eventDate = new Date("Nov 02, 2025 18:00:00").getTime();
-        const daysEl = document.getElementById('days');
-        const hoursEl = document.getElementById('hours');
+        const { days: daysEl, hours: hoursEl } = this.elements;
+        
+        if (!daysEl || !hoursEl) return;
 
         const updateCountdown = () => {
-            const now = new Date().getTime();
+            const now = Date.now();
             const distance = eventDate - now;
 
             if (distance < 0) {
@@ -384,39 +400,44 @@ class BirthdayInvitationController {
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-            // Animate number changes
-            this.animateNumberChange(daysEl, days.toString().padStart(2, '0'));
-            this.animateNumberChange(hoursEl, hours.toString().padStart(2, '0'));
+            // Only update if values changed
+            this.updateCountdownElement(daysEl, days.toString().padStart(2, '0'));
+            this.updateCountdownElement(hoursEl, hours.toString().padStart(2, '0'));
         };
 
         this.countdownInterval = setInterval(updateCountdown, 1000);
         updateCountdown();
     }
 
-    animateNumberChange(element, newValue) {
+    updateCountdownElement(element, newValue) {
         if (element.textContent !== newValue) {
-            element.style.transform = 'scale(1.3)';
-            element.style.textShadow = '0 0 10px rgba(255, 107, 53, 0.8)';
-
-            setTimeout(() => {
-                element.textContent = newValue;
-                element.style.transform = 'scale(1)';
-                element.style.textShadow = '';
-            }, 200);
+            this.animateNumberChange(element, newValue);
         }
+    }
+
+    animateNumberChange(element, newValue) {
+        element.style.transform = 'scale(1.3)';
+        element.style.textShadow = '0 0 10px rgba(255, 107, 53, 0.8)';
+
+        setTimeout(() => {
+            element.textContent = newValue;
+            element.style.transform = 'scale(1)';
+            element.style.textShadow = '';
+        }, 200);
     }
 
     handlePartyStarted() {
         const countdownSection = document.querySelector('.countdown-section');
-        countdownSection.innerHTML = `
-          <h3>🎊 The Party Has Begun! 🎊</h3>
-          <div class="event-started">
-            <p style="font-size: 1.2rem; color: #ff6b35; margin: 15px 0;">Hope you're having a blast!</p>
-            <div style="font-size: 2rem; animation: partyTime 1s ease-in-out infinite;">🎉 🎂 🎈 🍰 🎁</div>
-          </div>
-        `;
+        if (countdownSection) {
+            countdownSection.innerHTML = `
+              <h3>🎊 The Party Has Begun! 🎊</h3>
+              <div class="event-started">
+                <p style="font-size: 1.2rem; color: #ff6b35; margin: 15px 0;">Hope you're having a blast!</p>
+                <div style="font-size: 2rem; animation: partyTime 1s ease-in-out infinite;">🎉 🎂 🎈 🍰 🎁</div>
+              </div>
+            `;
+        }
 
         clearInterval(this.countdownInterval);
         this.triggerBirthdayConfetti();
@@ -424,10 +445,8 @@ class BirthdayInvitationController {
 
     // Music Controls
     toggleMusic() {
-        const musicBtn = document.getElementById('musicBtn');
-        const musicText = musicBtn.querySelector('.music-text');
-        const bgMusic = document.getElementById('bgMusic');
-
+        const { musicBtn, bgMusic } = this.elements;
+        
         if (this.isMusicPlaying) {
             bgMusic.pause();
             musicBtn.classList.remove('playing');
@@ -438,36 +457,35 @@ class BirthdayInvitationController {
     }
 
     startMusic() {
-        const musicBtn = document.getElementById('musicBtn');
-        const musicText = musicBtn.querySelector('.music-text');
-        const bgMusic = document.getElementById('bgMusic');
+        const { musicBtn, bgMusic } = this.elements;
 
-        bgMusic.play().then(() => {
-            musicBtn.classList.add('playing');
-            this.isMusicPlaying = true;
-        }).catch(() => {
-            console.log('Auto-play prevented. User interaction required.');
-        });
+        bgMusic.play()
+            .then(() => {
+                musicBtn.classList.add('playing');
+                this.isMusicPlaying = true;
+            })
+            .catch(() => {
+                console.log('Auto-play prevented. User interaction required.');
+            });
     }
 
     // Modal Management
     setupModals() {
-        const rsvpModal = document.getElementById('rsvpModal');
-        const closeModal = document.getElementById('closeModal');
-        const shareModal = document.getElementById('shareModal');
-        const closeShareModal = document.getElementById('closeShareModal');
-
-        closeModal.addEventListener('click', () => this.closeModal(rsvpModal));
-        closeShareModal.addEventListener('click', () => this.closeModal(shareModal));
+        const { rsvpModal, closeModal, shareModal, closeShareModal } = this.elements;
+        
+        if (!rsvpModal || !shareModal) return;
+        closeModal.addEventListener('click', () => this.closeModal(rsvpModal), { passive: true });
+        closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
 
         [rsvpModal, shareModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     this.closeModal(modal);
                 }
-            });
+            }, { passive: true });
         });
 
+        // Single keydown listener for all modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.closeModal(rsvpModal);
@@ -477,18 +495,21 @@ class BirthdayInvitationController {
     }
 
     openRSVPModal() {
-        const modal = document.getElementById('rsvpModal');
+        const modal = this.elements.rsvpModal;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
 
-        const firstInput = modal.querySelector('input');
-        if (firstInput) {
-            setTimeout(() => firstInput.focus(), 300);
-        }
+        // Use requestAnimationFrame for focus
+        this.rafId = requestAnimationFrame(() => {
+            const firstInput = modal.querySelector('input');
+            if (firstInput) {
+                setTimeout(() => firstInput.focus(), 300);
+            }
+        });
     }
 
     openShareModal() {
-        const modal = document.getElementById('shareModal');
+        const modal = this.elements.shareModal;
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
     }
@@ -505,12 +526,12 @@ class BirthdayInvitationController {
             option.addEventListener('click', () => {
                 const platform = option.dataset.platform;
                 this.handleShare(platform);
-            });
+            }, { passive: true });
         });
     }
 
     handleShare(platform) {
-        const shareText = "💌 Hey! I’ve got a surprise invitation for you. Open the link 🎉";
+        const shareText = "💌 Hey! I've got a surprise invitation for you. Open the link 🎉";
         const shareUrl = window.location.href;
 
         switch (platform) {
@@ -523,22 +544,37 @@ class BirthdayInvitationController {
                 break;
         }
 
-        this.closeModal(document.getElementById('shareModal'));
+        this.closeModal(this.elements.shareModal);
     }
 
+    // clipboard function
     async copyToClipboard(text) {
         try {
             await navigator.clipboard.writeText(text);
             this.showNotification('Link copied to clipboard! 📋', 'success');
         } catch (err) {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            this.showNotification('Link copied to clipboard! 📋', 'success');
+            this.fallbackCopyTextToClipboard(text);
         }
+    }
+
+    fallbackCopyTextToClipboard(text) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            this.showNotification('Link copied to clipboard! 📋', 'success');
+        } catch (err) {
+            this.showNotification('Failed to copy link', 'error');
+        }
+        
+        document.body.removeChild(textArea);
     }
 
     // Touch Support
@@ -547,38 +583,63 @@ class BirthdayInvitationController {
 
         interactiveElements.forEach(element => {
             element.addEventListener('touchstart', () => {
-                element.style.transform = element.style.transform + ' scale(0.95)';
-            });
+                element.style.transform = (element.style.transform || '') + ' scale(0.95)';
+            }, { passive: true });
 
             element.addEventListener('touchend', () => {
                 setTimeout(() => {
                     element.style.transform = element.style.transform.replace(' scale(0.95)', '');
                 }, 100);
-            });
+            }, { passive: true });
         });
+    }
+
+    // Throttle utility for performance
+    throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
     }
 
     // Responsive Handling
     handleResize() {
         const countdown = document.querySelector('.countdown');
-        if (window.innerWidth < 350) {
-            countdown.style.gridTemplateColumns = 'repeat(2, 1fr)';
-        } else {
-            countdown.style.gridTemplateColumns = 'repeat(4, 1fr)';
+        if (countdown) {
+            if (window.innerWidth < 350) {
+                countdown.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            } else {
+                countdown.style.gridTemplateColumns = 'repeat(4, 1fr)';
+            }
         }
     }
 
     // Notification System
     showNotification(message, type = 'info') {
+        const existingNotifications = document.querySelectorAll('.notification');
+        if (existingNotifications.length >= 3) {
+            existingNotifications[0].remove();
+        }
+
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `<div class="notification-content">${message}</div>`;
+
+        const bgColor = type === 'success' ? 
+            'linear-gradient(135deg, #4CAF50, #45a049)' : 
+            'linear-gradient(135deg, #ff6b35, #ff8566)';
 
         notification.style.cssText = `
           position: fixed;
           top: 20px;
           right: 20px;
-          background: ${type === 'success' ? 'linear-gradient(135deg, #4CAF50, #45a049)' : 'linear-gradient(135deg, #ff6b35, #ff8566)'};
+          background: ${bgColor};
           color: white;
           padding: 15px 20px;
           border-radius: 15px;
@@ -588,13 +649,14 @@ class BirthdayInvitationController {
           max-width: 300px;
           font-family: inherit;
           font-weight: 500;
+          will-change: transform;
         `;
 
         document.body.appendChild(notification);
 
         setTimeout(() => {
             if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
+                notification.remove();
             }
         }, 3000);
     }
@@ -604,81 +666,102 @@ class BirthdayInvitationController {
         return Math.random() * (max - min) + min;
     }
 
-    // Cleanup
     cleanup() {
+        // Clear all intervals
         if (this.countdownInterval) {
             clearInterval(this.countdownInterval);
         }
+        if (this.floatingConfettiInterval) {
+            clearInterval(this.floatingConfettiInterval);
+        }
+        
+        // Cancel animation frames
+        if (this.rafId) {
+            cancelAnimationFrame(this.rafId);
+        }
 
-        const bgMusic = document.getElementById('bgMusic');
+        // Stop music
+        const { bgMusic } = this.elements;
         if (bgMusic && !bgMusic.paused) {
             bgMusic.pause();
         }
+
+        // Remove event listeners
+        window.removeEventListener('resize', this.throttledResize);
     }
 }
 
-// Initialize the application
+// initialization
 document.addEventListener('DOMContentLoaded', () => {
-    new BirthdayInvitationController();
+    const controller = new BirthdayInvitationController();
 
-    // for final page of book
+    // storybook completion handler
     const storybookContainer = document.querySelector('.storybook-container');
     if (storybookContainer) {
         storybookContainer.addEventListener('storyComplete', () => {
-            this.showInvitationAfterStory();
-        });
+            controller.showInvitationAfterStory();
+        }, { once: true });
     }
 
-    // for gallery
-    const galleryImages = document.querySelectorAll('.dress-code-gallery img');
+    const galleryContainer = document.querySelector('.dress-code-gallery');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     const closeBtn = document.querySelector('.lightbox .close');
 
-    // Open on image click
-    galleryImages.forEach(img => {
-        img.addEventListener('click', () => {
-            lightbox.style.display = 'flex';
-            lightboxImg.src = img.src;
-            lightboxImg.alt = img.alt;
-        });
-    });
+    if (galleryContainer && lightbox) {
+        galleryContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'IMG') {
+                lightbox.style.display = 'flex';
+                lightboxImg.src = e.target.src;
+                lightboxImg.alt = e.target.alt;
+            }
+        }, { passive: true });
 
-    closeBtn.addEventListener('click', () => {
-        lightbox.style.display = 'none';
-    });
-
-    // Close when clicking outside the image
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
+        closeBtn.addEventListener('click', () => {
             lightbox.style.display = 'none';
-        }
-    });
+        }, { passive: true });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+            }
+        }, { passive: true });
+    }
 });
 
-// Add notification animations
+//notification styles
 const notificationStyles = document.createElement('style');
 notificationStyles.textContent = `
-      @keyframes slideInRight {
+    @keyframes slideInRight {
         from {
-          transform: translateX(100%);
-          opacity: 0;
+            transform: translateX(100%);
+            opacity: 0;
         }
         to {
-          transform: translateX(0);
-          opacity: 1;
+            transform: translateX(0);
+            opacity: 1;
         }
-      }
-      
-      @keyframes slideOutRight {
+    }
+    
+    @keyframes slideOutRight {
         from {
-          transform: translateX(0);
-          opacity: 1;
+            transform: translateX(0);
+            opacity: 1;
         }
         to {
-          transform: translateX(100%);
-          opacity: 0;
+            transform: translateX(100%);
+            opacity: 0;
         }
-      }
-    `;
-document.head.appendChild(notificationStyles);
+    }
+    
+    .notification {
+        will-change: transform;
+        backface-visibility: hidden;
+    }
+`;
+
+// add styles if they don't exist
+if (!document.querySelector('#notification-styles')) {
+    notificationStyles.id = 'notification-styles';
+    document.head.appendChild(notificationStyles);
+}

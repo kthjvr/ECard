@@ -1,63 +1,64 @@
 :root {
-    /* Primary Theme Colors */
-    --primary-pink: #ff9a9e;
-    --primary-blue: #a6c1ee;
+    /* Primary Theme Colors (Neon Demon Hunter Vibes) */
+    --primary-pink: #ff2e92;
+    --primary-blue: #4bc9ff;
     --primary-gradient: linear-gradient(135deg, var(--primary-pink), var(--primary-blue));
-    --darker-pink: #ff2e63;
-    --darker-blue: #3d5af1;
+    --darker-pink: #d6006f;
+    --darker-blue: #003cff;
     --darker-gradient: linear-gradient(135deg, var(--darker-pink), var(--darker-blue));
 
     /* Background Colors */
-    --bg-gradient: linear-gradient(135deg, #f6d365, #fda085, #fbc2eb, #a18cd1);
-    --loading-bg: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+    --bg-gradient: linear-gradient(135deg, #0d0d0d, #1a0033, #000814); /* Dark futuristic */
+    --loading-bg: linear-gradient(135deg, #ff2e92, #4bc9ff);
 
     /* Glass Effect Colors */
-    --glass-bg: rgba(255, 255, 255, 0.95);
-    --glass-border: rgba(255, 107, 53, 0.2);
-    --glass-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    --glass-bg: rgba(15, 15, 30, 0.85);
+    --glass-border: rgba(255, 46, 146, 0.4);
+    --glass-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
 
     /* Text Colors */
+    --text-black: #0f0a0a;
     --text-white: #ffffff;
-    --text-dark: #555555;
-    --text-muted: #666666;
-    --text-light: #777777;
-    --text-shadow: rgba(255, 255, 255, 0.95);
+    --text-dark: #cccccc;
+    --text-muted: #999999;
+    --text-light: #bbbbbb;
+    --text-shadow: rgba(255, 46, 146, 0.9);
 
     /* Interactive Colors */
-    --hover-overlay: rgba(255, 107, 53, 0.1);
-    --hover-overlay-light: rgba(255, 107, 53, 0.2);
-    --focus-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
-    --border-color: #eeeeee;
+    --hover-overlay: rgba(75, 201, 255, 0.15);
+    --hover-overlay-light: rgba(255, 46, 146, 0.2);
+    --focus-shadow: 0 0 0 3px rgba(255, 46, 146, 0.4);
+    --border-color: #2a2a2a;
 
     /* Gradient Variations */
-    --accent-gradient: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 210, 63, 0.1));
-    --special-gradient: linear-gradient(135deg, rgba(255, 210, 63, 0.1), rgba(78, 205, 196, 0.1));
-    --countdown-gradient: linear-gradient(135deg, rgba(255, 107, 53, 0.15), rgba(255, 210, 63, 0.15));
+    --accent-gradient: linear-gradient(135deg, rgba(255, 46, 146, 0.2), rgba(75, 201, 255, 0.2));
+    --special-gradient: linear-gradient(135deg, rgba(255, 46, 146, 0.25), rgba(0, 60, 255, 0.25));
+    --countdown-gradient: linear-gradient(135deg, rgba(255, 46, 146, 0.15), rgba(75, 201, 255, 0.15));
 
     /* Shadows */
-    --shadow-small: 0 8px 20px rgba(255, 107, 53, 0.3);
-    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.2);
-    --shadow-large: 0 12px 30px rgba(255, 107, 53, 0.6);
-    --shadow-card: 0 0 15px rgba(0, 0, 0, 0.15);
+    --shadow-small: 0 8px 20px rgba(255, 46, 146, 0.3);
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.6);
+    --shadow-large: 0 12px 30px rgba(75, 201, 255, 0.6);
+    --shadow-card: 0 0 20px rgba(255, 46, 146, 0.4);
 
     /* Typography */
-    --font-family: "Poppins", sans-serif;
+    --font-family: "Orbitron", "Poppins", sans-serif;
     --font-weight-light: 300;
     --font-weight-regular: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
-    --font-weight-bold: 700;
+    --font-weight-bold: 800;
 
     /* Font Sizes */
     --fs-small: 0.85rem;
     --fs-regular: 1rem;
-    --fs-medium: 1.1rem;
-    --fs-large: 1.2rem;
-    --fs-xl: 1.4rem;
-    --fs-xxl: 1.6rem;
-    --fs-title: clamp(1.8rem, 4vw, 2.8rem);
-    --fs-icon: 1.8rem;
-    --fs-icon-large: 2rem;
+    --fs-medium: 1.2rem;
+    --fs-large: 1.4rem;
+    --fs-xl: 1.6rem;
+    --fs-xxl: 1.8rem;
+    --fs-title: clamp(2rem, 4.5vw, 3.2rem);
+    --fs-icon: 2rem;
+    --fs-icon-large: 2.4rem;
 
     /* Spacing */
     --spacing-xs: 5px;
@@ -71,9 +72,9 @@
     /* Border Radius */
     --radius-sm: 6px;
     --radius-md: 12px;
-    --radius-lg: 15px;
-    --radius-xl: 20px;
-    --radius-xxl: 25px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-xxl: 30px;
     --radius-round: 50px;
     --radius-circle: 50%;
 
@@ -386,7 +387,7 @@ body::-webkit-scrollbar {
 }
 
 .header-image {
-    max-width: 160px;
+    max-width: 180px;
     margin-bottom: var(--spacing-sm);
     animation: float 4s ease-in-out infinite;
     border-radius: 24px;
@@ -528,7 +529,7 @@ body::-webkit-scrollbar {
    INVITATION CARD
    =================================== */
 .invitation-card {
-    max-width: 450px;
+    max-width: 600px;
     width: 100%;
     background: var(--glass-bg);
     -webkit-backdrop-filter: blur(15px);
