@@ -130,6 +130,9 @@ h2 {
 .book-photo {
     animation: float 3s ease-in-out infinite;
     border-radius: var(--radius-xxl);
+    width: 50%;
+    height: auto;
+    object-fit: contain;
 }
 
 /* Cake Styling */
