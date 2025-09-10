@@ -195,8 +195,8 @@ h2 {
 
 .gift-box-container {
     position: fixed;
-    bottom: clamp(var(--spacing-lg), 4vw, 40px);
-    right: clamp(var(--spacing-lg), 4vw, 40px);
+    bottom: var(--spacing-xxl);
+    right: var(--spacing-xxl);
     width: clamp(80px, 12vw, 120px);
     height: clamp(100px, 15vw, 150px);
     z-index: var(--z-modal);
@@ -227,10 +227,6 @@ h2 {
 
 .box:hover {
     transform: scale(1.05);
-}
-
-.box:focus {
-    box-shadow: var(--focus-shadow);
 }
 
 .jump-character {
@@ -586,11 +582,14 @@ h2 {
 
 @media screen and (max-width: 768px) {
     .book-photo {
-        width: 100%;
+        width: 65%;
+        height: auto;
+        object-fit: contain;
     }
 
     .gift-box-container {
-        bottom: 10%;
+        bottom: var(--spacing-xxl);
+        right: var(--spacing-xxl);
     }
 
     h1 {

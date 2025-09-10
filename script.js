@@ -113,12 +113,9 @@ class BirthdayInvitationController {
             this.startMusic();
 
             // Scroll to invitation card on mobile
-            if (window.innerWidth <= 768) {
-                storybookSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-            }
+            storybookSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            window.scrollBy({ top: 800, behavior: 'smooth' });
+
         }, 1200);
     }
 

@@ -386,7 +386,7 @@ body::-webkit-scrollbar {
 }
 
 .header-image {
-    max-width: 250px;
+    max-width: 160px;
     margin-bottom: var(--spacing-sm);
     animation: float 4s ease-in-out infinite;
     border-radius: 24px;
@@ -800,7 +800,7 @@ body::-webkit-scrollbar {
 .music-controls {
     position: fixed;
     bottom: var(--spacing-xxl);
-    right: var(--spacing-xxl);
+    left: var(--spacing-xxl);
     z-index: var(--z-music);
 }
 
