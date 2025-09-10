@@ -7,8 +7,9 @@
   <title>Alexa's Birthday Invitation</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="storyBook.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:title" content="🎉 A Surprise Invitation Awaits!" />
@@ -36,7 +37,7 @@
 
     <!-- Header  -->
     <div class="header-section">
-      <img src="image.jpg" alt="Birthday Banner" class="header-image">
+      <img src="/images/cake.png" alt="Birthday Banner" class="header-image">
 
       <h1 class="animated-title">✨ It's Alexa's Birthday! ✨</h1>
       <p class="subtitle">Tap the envelope below to reveal your party invitation</p>
@@ -53,6 +54,94 @@
         <div class="letter" id="letter">
           <p>You're invited! Come ready to party!</p>
         </div>
+      </div>
+    </div>
+
+    <!-- Story Book -->
+    <div class="storybook" id="storybook">
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- Gift Box Animation Container -->
+      <div class="gift-box-container">
+        <div class="confetti-container" id="confettiContainer"></div>
+
+        <!-- Jump Character -->
+        <div class="jump-character" id="jumpCharacter">
+          <img src="charcter.png" alt="jump character" style="width: 100%; height: 100%;" />
+        </div>
+
+        <!-- Gift Box Button -->
+        <button title="giftBox" class="box" id="giftBoxBtn">
+          <img src="box.png" alt="box" style="width: 100%; height: 100%;" />
+        </button>
+
+        <!-- Gift Box Lid -->
+        <div class="gift-lid" id="giftBoxLid">
+          <img src="lid.png" alt="box gift-lid" style="width: 100%; height: 100%;" />
+        </div>
+      </div>
+
+      <!-- Cover Page -->
+      <div class="page active" data-page="0">
+        <h1>My Birthday Adventure</h1>
+        <img src="/images/cover.png" alt="First Birthday" class="book-photo">
+        <p class="story-text">Come along on a magical journey through birthdays 1 to 6!</p>
+      </div>
+
+      <!-- Age 1 -->
+      <div class="page age-1" data-page="1">
+        <h2>My First Birthday! 🎂</h2>
+        <img src="/images/First-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">One year old and ready to explore!</p>
+      </div>
+
+      <!-- Age 2 -->
+      <div class="page age-2" data-page="2">
+        <h2>Two Years of Wonder! 🎈</h2>
+        <img src="/images/Second-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">Two candles dancing in the breeze! I'm getting bigger and learning so many new things
+          every day.</p>
+      </div>
+
+      <!-- Age 3 -->
+      <div class="page age-3" data-page="3">
+        <h2>Three and Free! 🌟</h2>
+        <img src="/images/Third-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">Three years of adventures! I can run, jump, and play.</p>
+      </div>
+
+      <!-- Age 4 -->
+      <div class="page age-4" data-page="4">
+        <h2>Fantastic Four! 🚀</h2>
+        <img src="/images/Fourth-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">Four candles glowing bright!</p>
+      </div>
+
+      <!-- Age 5 -->
+      <div class="page age-5" data-page="5">
+        <h2>High Five for Five! 🖐️</h2>
+        <img src="/images/Fifth-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">Five years of growing and learning! I'm getting ready for big adventures and maybe even
+          school soon!</p>
+      </div>
+
+      <!-- Age 6 -->
+      <div class="page age-6" data-page="6">
+        <h2>Super Six! 🎉</h2>
+        <img src="/images/Sixth-Birthday.jpg" alt="First Birthday" class="book-photo">
+        <p class="story-text">Six wonderful years of birthdays!</p>
+      </div>
+
+      <!-- Final Page -->
+      <div class="page" data-page="7" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
+        onload="this.closest('.storybook-container').dispatchEvent(new CustomEvent('storyComplete'))">
+        <h2 style="color: white;">Time to Celebrate! 🎉✨</h2>
+        <img src="/images/final-cover.png" alt="First Birthday" class="book-photo">
+        <p class="story-text" style="color: white;">
+            Get your party hats on, grab the confetti, and let’s make this next birthday the happiest one yet! 🥳
+          </p>
       </div>
     </div>
 
@@ -77,17 +166,13 @@
             <strong>Location:</strong>
             <p>Test Location<br>
               <small>123 Test, Location</small>
-              <div id="map">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.08617479424!2d-122.41941508468188!3d37.77492977975957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064c6c1c1d9%3A0x8f18b4b0c2b2b2b2!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1694250000000!5m2!1sen!2sus"
-                  width="200"
-                  height="250"
-                  style="border:0;"
-                  allowfullscreen=""
-                  loading="lazy"
-                  referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-              </div>
+            <div id="map">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.08617479424!2d-122.41941508468188!3d37.77492977975957!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80858064c6c1c1d9%3A0x8f18b4b0c2b2b2b2!2sSan%20Francisco%2C%20CA!5e0!3m2!1sen!2sus!4v1694250000000!5m2!1sen!2sus"
+                width="200" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
             </p>
           </div>
         </div>
@@ -108,36 +193,35 @@
           </div>
         </div>
 
-      <div class="countdown-section">
-        <h3>⏰ Countdown to the Party!</h3>
-        <div class="countdown" id="countdown">
-          <div class="time-unit">
-            <span class="number" id="days">00</span>
-            <span class="label">Days</span>
-          </div>
-          <div class="time-unit">
-            <span class="number" id="hours">00</span>
-            <span class="label">Hours</span>
+        <div class="countdown-section">
+          <h3>⏰ Countdown to the Party!</h3>
+          <div class="countdown" id="countdown">
+            <div class="time-unit">
+              <span class="number" id="days">00</span>
+              <span class="label">Days</span>
+            </div>
+            <div class="time-unit">
+              <span class="number" id="hours">00</span>
+              <span class="label">Hours</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="actions">
-        <button type="button" class="rsvp-btn primary" id="rsvpBtn">
-          <span class="btn-icon">📝</span>
-          RSVP Now
-        </button>
-        <button type="button" class="share-btn secondary" id="shareBtn">
-          <span class="btn-icon">📤</span>
-          Share Invite
-        </button>
-      </div>
+        <div class="actions">
+          <button type="button" class="rsvp-btn primary" id="rsvpBtn">
+            <span class="btn-icon">📝</span>
+            RSVP Now
+          </button>
+          <button type="button" class="share-btn secondary" id="shareBtn">
+            <span class="btn-icon">📤</span>
+            Share Invite
+          </button>
+        </div>
 
-      <div class="special-message">
-        <p><em>Can’t wait to celebrate and have tons of fun! 🎉🎈✨</em></p>
+        <div class="special-message">
+          <p><em>Can’t wait to celebrate and have tons of fun! 🎉🎈✨</em></p>
+        </div>
       </div>
-    </div>
-
     </div>
 
     <!-- Music Controls -->

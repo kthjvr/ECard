@@ -4,6 +4,8 @@ class BirthdayInvitationController {
         this.isEnvelopeOpened = false;
         this.isMusicPlaying = false;
         this.countdownInterval = null;
+        this.giftBoxState = null;
+        this.currentPage = 0;
 
         this.init();
     }
@@ -76,12 +78,11 @@ class BirthdayInvitationController {
         const envelope = document.getElementById('envelope');
         const lid = document.getElementById('lid');
         const letter = document.getElementById('letter');
-        const inviteDetails = document.getElementById('inviteDetails');
         const openSound = document.getElementById('openSound');
         const lidOne = document.getElementById('lid1');
+        const storybookSection = document.getElementById('storybook');
 
         if (lidOne) {
-            console.log('true');
             lidOne.style.display = 'none';
         }
 
@@ -103,22 +104,175 @@ class BirthdayInvitationController {
             letter.classList.add('visible');
         }, 500);
 
-        // Show invitation details with delay
+        // Show story book
         setTimeout(() => {
-            inviteDetails.classList.add('visible');
-            this.triggerBirthdayConfetti();
+            storybookSection.classList.add('visible');
+            this.showStoryBook();
 
             // Auto-play music after interaction
             this.startMusic();
 
             // Scroll to invitation card on mobile
             if (window.innerWidth <= 768) {
-                inviteDetails.scrollIntoView({
+                storybookSection.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center'
                 });
             }
         }, 1200);
+    }
+
+    showInvitationAfterStory() {
+        const inviteDetails = document.getElementById('inviteDetails');
+
+        setTimeout(() => {
+            inviteDetails.classList.add('visible');
+
+            if (window.innerWidth <= 768) {
+                const elementTop = inviteDetails.getBoundingClientRect().top + window.scrollY;
+                const offset = 120;
+                window.scrollTo({
+                    top: elementTop - offset,
+                    behavior: 'smooth'
+                });
+            }
+        }, 1000);
+    }
+
+    showStoryBook() {
+        // Gift Box Animation State
+        const initState = {
+            move: "move",
+            jump: "",
+            rotated: "",
+            rotating: ""
+        };
+
+        // Initialize propertues
+        if (!this.giftBoxState) {
+            this.giftBoxState = { ...initState };
+        }
+        if (!this.currentPage) {
+            this.currentPage = 0;
+        }
+
+        const pages = document.querySelectorAll('.page');
+        const totalPages = pages.length;
+        const progressBar = document.getElementById('progressBar');
+        const giftBoxBtn = document.getElementById('giftBoxBtn');
+        const giftBoxLid = document.getElementById('giftBoxLid');
+        const jumpCharacter = document.getElementById('jumpCharacter');
+        const self = this;
+
+        // Gift Box Animation Functions
+        function updateGiftBoxState(newState) {
+            self.giftBoxState = { ...self.giftBoxState, ...newState };
+            applyGiftBoxClasses();
+        }
+
+        function applyGiftBoxClasses() {
+            const { move, jump, rotated, rotating } = self.giftBoxState;
+
+            // Apply classes to gift-lid
+            if (giftBoxLid) {
+                giftBoxLid.className = `gift-lid ${move} ${rotating} ${rotated}`.trim();
+            }
+
+            // Apply jump class to character
+            if (jumpCharacter) {
+                jumpCharacter.className = `jump-character ${jump}`.trim();
+            }
+        }
+
+        function animateGiftBox() {
+            const isDone = self.giftBoxState.rotated === "rotated";
+
+            if (!isDone) {
+                updateGiftBoxState({ rotating: "rotating" });
+
+                setTimeout(() => {
+                    updateGiftBoxState({ jump: "jump" });
+                    self.triggerBirthdayConfetti?.();
+                }, 300);
+
+                setTimeout(() => {
+                    updateGiftBoxState({ rotated: "rotated" });
+                    nextPage();
+
+                    setTimeout(() => {
+                        closeGiftBox();
+                    }, 1300);
+                }, 1000);
+            } else {
+                updateGiftBoxState(initState);
+                nextPage();
+            }
+
+            const moving = self.giftBoxState.move === "move" ? "" : "move";
+            updateGiftBoxState({ move: moving });
+        }
+
+        function closeGiftBox() {
+            if (self.giftBoxState.rotated === "rotated") {
+                updateGiftBoxState({ jump: "" });
+
+                if (giftBoxLid) {
+                    giftBoxLid.style.animation = "rotating-back 0.7s ease-out forwards";
+
+                    setTimeout(() => {
+                        updateGiftBoxState(initState);
+                        giftBoxLid.style.animation = "";
+                    }, 700);
+                }
+            }
+        }
+
+        // Storybook Functions
+        function updateProgress() {
+            if (progressBar) {
+                const progress = (self.currentPage / (totalPages - 1)) * 100;
+                progressBar.style.width = progress + '%';
+            }
+        }
+
+        function showPage(pageIndex) {
+            pages.forEach((page, index) => {
+                page.classList.remove('active', 'prev');
+                if (index === pageIndex) {
+                    page.classList.add('active');
+                } else if (index < pageIndex) {
+                    page.classList.add('prev');
+                }
+            });
+            updateProgress();
+        }
+
+        function nextPage() {
+            self.currentPage = (self.currentPage + 1) % totalPages;
+            showPage(self.currentPage);
+
+            // Check if we've reached the last page
+            if (self.currentPage === totalPages - 1) {
+                setTimeout(() => {
+                    self.showInvitationAfterStory();
+                }, 1000);
+            }
+        }
+
+        if (giftBoxBtn && !giftBoxBtn.hasAttribute('data-listener-added')) {
+            giftBoxBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                animateGiftBox();
+            });
+            giftBoxBtn.setAttribute('data-listener-added', 'true');
+        }
+
+        // Initialize display
+        if (totalPages > 0) {
+            showPage(0);
+            updateProgress();
+            applyGiftBoxClasses();
+        }
     }
 
     // Birthday Confetti Effect
@@ -193,7 +347,7 @@ class BirthdayInvitationController {
         let currentConfetti = 0;
 
         const createConfetti = () => {
-            if(currentConfetti >= MAX_CONFETTI) return;
+            if (currentConfetti >= MAX_CONFETTI) return;
             currentConfetti++;
 
             const piece = document.createElement('div');
@@ -470,6 +624,15 @@ class BirthdayInvitationController {
 document.addEventListener('DOMContentLoaded', () => {
     new BirthdayInvitationController();
 
+    // for final page of book
+    const storybookContainer = document.querySelector('.storybook-container');
+    if (storybookContainer) {
+        storybookContainer.addEventListener('storyComplete', () => {
+            this.showInvitationAfterStory();
+        });
+    }
+
+    // for gallery
     const galleryImages = document.querySelectorAll('.dress-code-gallery img');
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
@@ -477,22 +640,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Open on image click
     galleryImages.forEach(img => {
-    img.addEventListener('click', () => {
-        lightbox.style.display = 'flex';
-        lightboxImg.src = img.src;
-        lightboxImg.alt = img.alt;
-    });
+        img.addEventListener('click', () => {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+        });
     });
 
     closeBtn.addEventListener('click', () => {
-    lightbox.style.display = 'none';
+        lightbox.style.display = 'none';
     });
 
     // Close when clicking outside the image
     lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-        lightbox.style.display = 'none';
-    }
+        if (e.target === lightbox) {
+            lightbox.style.display = 'none';
+        }
     });
 });
 
