@@ -37,7 +37,7 @@
 
     <!-- Header  -->
     <div class="header-section">
-      <img src="/images/huntrix-cake.png" alt="Birthday Banner" class="header-image">
+      <img src="https://ik.imagekit.io/e3wiv79bq/huntrix-cake.png" alt="Birthday Banner" class="header-image">
 
       <h1 class="animated-title">✨ It's Damaris Alexa's 7<sup>th</sup> Birthday!</h1>
       <p class="subtitle">Tap the envelope below to reveal your party invitation</p>
@@ -69,24 +69,24 @@
 
         <!-- Jump Character -->
         <div class="jump-character" id="jumpCharacter">
-          <img src="/images/character.png" alt="jump character" style="width: 100%; height: 100%;" />
+          <img src="https://ik.imagekit.io/e3wiv79bq/character.png" alt="jump character" style="width: 100%; height: 100%;" />
         </div>
 
         <!-- Gift Box Button -->
-        <button title="giftBox" class="box" id="giftBoxBtn">
-          <img src="/images/box.png" alt="box" style="width: 100%; height: 100%;" />
-        </button>
+        <div type="button" title="giftBox" class="box" id="giftBoxBtn">
+          <img src="https://ik.imagekit.io/e3wiv79bq/box.png" alt="box" style="width: 100%; height: 100%;" />
+        </div>
 
         <!-- Gift Box Lid -->
         <div class="gift-lid" id="giftBoxLid">
-          <img src="/images/lid.png" alt="box gift-lid" style="width: 100%; height: 100%;" />
+          <img src="https://ik.imagekit.io/e3wiv79bq/lid.png" alt="box gift-lid" style="width: 100%; height: 100%;" />
         </div>
       </div>
 
       <!-- Cover Page -->
       <div class="page active" data-page="0">
         <h1>My Birthday Adventure</h1>
-        <img src="/images/cover.png" alt="First Birthday" class="book-photo">
+        <img src="https://ik.imagekit.io/e3wiv79bq/cover.png" alt="First Birthday" class="book-photo">
         <p class="story-text">Come along on a magical journey of my life and see what you might have missed from my birthdays!</p>
       </div>
 
@@ -138,7 +138,7 @@
       <div class="page" data-page="7" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"
         onload="this.closest('.storybook-container').dispatchEvent(new CustomEvent('storyComplete'))">
         <h2 style="color: white;">Time to Celebrate! 🎉✨</h2>
-        <img src="/images/final-cover.png" alt="First Birthday" class="book-photo">
+        <img src="https://ik.imagekit.io/e3wiv79bq/final-cover.png" alt="First Birthday" class="book-photo">
         <p class="story-text" style="color: white;">
             Get your party hats on, grab the confetti, and let’s make this next birthday the happiest one yet! 🥳
           </p>
@@ -209,8 +209,10 @@
 
         <div class="actions">
           <button type="button" class="rsvp-btn primary" id="rsvpBtn">
-            <span class="btn-icon">📝</span>
-            RSVP Now
+            <a href="https://forms.gle/7LHwd712pTA6szyi7" target="_blank" rel="noopener">
+              <span class="btn-icon">📝</span>
+                          RSVP Now
+            </a>
           </button>
           <button type="button" class="share-btn secondary" id="shareBtn">
             <span class="btn-icon">📤</span>
@@ -230,19 +232,6 @@
         <span class="music-icon">🎵</span>
       </button>
     </div>
-
-    <!-- RSVP Modal -->
-    <div class="modal" id="rsvpModal">
-      <div class="modal-content">
-        <span class="close" id="closeModal">&times;</span>
-        <h3>🎉 RSVP for the Party!</h3>
-        <iframe title="google-form" src="https://forms.gle/7LHwd712pTA6szyi7" width="100%" height="500" frameborder="0"
-          marginheight="0" marginwidth="0">
-          Loading…
-        </iframe>
-      </div>
-    </div>
-
 
     <!-- Share Modal -->
     <div class="modal" id="shareModal">
