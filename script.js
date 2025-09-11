@@ -472,13 +472,12 @@ class BirthdayInvitationController {
 
     // Modal Management
     setupModals() {
-        const { rsvpModal, closeModal, shareModal, closeShareModal } = this.elements;
+        const { closeModal, shareModal, closeShareModal } = this.elements;
         
-        if (!rsvpModal || !shareModal) return;
-        closeModal.addEventListener('click', () => this.closeModal(rsvpModal), { passive: true });
+        if (!shareModal) return;
         closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
 
-        [rsvpModal, shareModal].forEach(modal => {
+        [shareModal].forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     this.closeModal(modal);
@@ -489,7 +488,6 @@ class BirthdayInvitationController {
         // Single keydown listener for all modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                this.closeModal(rsvpModal);
                 this.closeModal(shareModal);
             }
         });
