@@ -368,7 +368,6 @@ body::-webkit-scrollbar {
     height: 14px;
     background: hsl(var(--hue), 80%, 60%);
     animation: confettiFall 6s linear forwards;
-    will-change: transform, opacity;
     pointer-events: none;
 }
 
@@ -392,7 +391,6 @@ body::-webkit-scrollbar {
     max-width: 180px;
     margin-bottom: var(--spacing-sm);
     animation: float 4s ease-in-out infinite;
-    will-change: transform, opacity;
     border-radius: 24px;
 }
 
@@ -402,7 +400,6 @@ body::-webkit-scrollbar {
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
     margin-bottom: var(--spacing-md);
     animation: titleBounce 3s ease-in-out infinite;
-    will-change: transform, opacity;
     font-weight: var(--font-weight-bold);
 }
 
@@ -416,7 +413,6 @@ body::-webkit-scrollbar {
 .pulse-indicator {
     font-size: var(--fs-icon-large);
     animation: bounce 2s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
@@ -427,7 +423,6 @@ body::-webkit-scrollbar {
     z-index: var(--z-header);
     position: relative;
     animation: musicPulse 3s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 .wrapper {
@@ -530,7 +525,6 @@ body::-webkit-scrollbar {
 .party-elements {
     font-size: var(--fs-icon);
     animation: celebrate 1.5s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
@@ -547,7 +541,6 @@ body::-webkit-scrollbar {
     box-shadow: var(--glass-shadow);
     display: none;
     animation: slideInUp var(--transition-extra-slow) ease forwards;
-    will-change: transform, opacity;
     z-index: var(--z-header);
     position: relative;
     margin-bottom: var(--spacing-xxl);
@@ -574,7 +567,6 @@ body::-webkit-scrollbar {
     font-size: var(--fs-icon-large);
     letter-spacing: var(--spacing-md);
     animation: partyTime 2s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
@@ -871,7 +863,6 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     animation: fadeIn var(--transition-normal) ease;
-    will-change: transform, opacity;
 }
 
 .modal-content {
@@ -1026,7 +1017,7 @@ textarea:focus {
     .page h2 {
         animation-duration: 6s;
     }
-    
+
     .floating-confetti {
         display: none;
     }
