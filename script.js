@@ -115,6 +115,7 @@ class BirthdayInvitationController {
             this.showStoryBook();
             this.startMusic();
             this.smoothScrollToStorybook(storybook);
+            this.triggerBirthdayConfetti();
             this.isAnimating = false;
         }, 1200);
     }
@@ -124,7 +125,7 @@ class BirthdayInvitationController {
             storybook.scrollIntoView({ behavior: 'smooth', block: 'start' });
             setTimeout(() => {
                 window.scrollBy({ top: 800, behavior: 'smooth' });
-            }, 100);
+            }, 1000);
         });
     }
 
@@ -287,7 +288,7 @@ class BirthdayInvitationController {
     triggerBirthdayConfetti() {
         if (!window.confetti) return;
         
-        const duration = 4000;
+        const duration = 2000;
         const animationEnd = Date.now() + duration;
         const colors = ['#ff6b35', '#ffd23f', '#4ecdc4', '#45b7d1', '#fd79a8', '#6c5ce7'];
 
@@ -299,7 +300,7 @@ class BirthdayInvitationController {
                 return;
             }
 
-            const particleCount = Math.floor(70 * (timeLeft / duration));
+            const particleCount = Math.floor(30 * (timeLeft / duration));
             this.createConfettiBurst(particleCount, colors, 0.1, 0.3);
             this.createConfettiBurst(particleCount, colors, 0.7, 0.9);
         }, 250);
