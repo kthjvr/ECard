@@ -306,7 +306,7 @@ h2 {
    =================================== */
 
 .gift-box-container {
-    position: fixed;
+    position: absolute;
     bottom: var(--spacing-xxl);
     right: var(--spacing-xxl);
     width: clamp(80px, 12vw, 120px);
@@ -412,7 +412,7 @@ h2 {
    =================================== */
 
 .confetti-container {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
@@ -450,10 +450,10 @@ h2 {
 }
 
 #balloonsContainer {
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: visible;
     z-index: var(--z-background);
 }
 

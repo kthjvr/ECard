@@ -199,8 +199,8 @@ class BirthdayInvitationController {
                 setTimeout(() => {
                     updateGiftBoxState({ rotated: "rotated" });
                     nextPage();
-                    setTimeout(closeGiftBox, 1300);
-                }, 1000);
+                    setTimeout(closeGiftBox, 700);
+                }, 700);
             } else {
                 updateGiftBoxState(initState);
                 nextPage();
