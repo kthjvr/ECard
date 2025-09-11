@@ -193,7 +193,7 @@ class BirthdayInvitationController {
 
                 setTimeout(() => {
                     updateGiftBoxState({ jump: "jump" });
-                    this.triggerBirthdayConfetti();
+                    // this.triggerBirthdayConfetti();
                 }, 300);
 
                 setTimeout(() => {
@@ -288,7 +288,7 @@ class BirthdayInvitationController {
     triggerBirthdayConfetti() {
         if (!window.confetti) return;
         
-        const duration = 2000;
+        const duration = 500;
         const animationEnd = Date.now() + duration;
         const colors = ['#ff6b35', '#ffd23f', '#4ecdc4', '#45b7d1', '#fd79a8', '#6c5ce7'];
 
@@ -327,7 +327,7 @@ class BirthdayInvitationController {
     createSpecialConfetti(colors) {
         if (window.confetti) {
             confetti({
-                particleCount: 100,
+                particleCount: 50,
                 spread: 100,
                 origin: { y: 0.6 },
                 shapes: ['circle'],
