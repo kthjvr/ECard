@@ -472,26 +472,40 @@ class BirthdayInvitationController {
 
     // Modal Management
     setupModals() {
-        const { closeModal, shareModal, closeShareModal } = this.elements;
-        
-        if (!shareModal) return;
-        closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
+        const { rsvpModal, closeModal, shareModal, closeShareModal } = this.elements;
 
-        [shareModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.closeModal(modal);
+        // RSVP modal close
+        if (closeModal) {
+            closeModal.addEventListener('click', () => this.closeModal(rsvpModal), { passive: true });
+        }
+        if (rsvpModal) {
+            rsvpModal.addEventListener('click', (e) => {
+                if (e.target === rsvpModal) {
+                    this.closeModal(rsvpModal);
                 }
             }, { passive: true });
-        });
+        }
 
-        // Single keydown listener for all modals
+        // Share modal close
+        if (closeShareModal) {
+            closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
+        }
+        if (shareModal) {
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) {
+                    this.closeModal(shareModal);
+                }
+            }, { passive: true });
+        }
+
+        // Escape key closes whichever is open
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                this.closeModal(shareModal);
+                [rsvpModal, shareModal].forEach(m => this.closeModal(m));
             }
         });
     }
+
 
     openRSVPModal() {
         const modal = this.elements.rsvpModal;

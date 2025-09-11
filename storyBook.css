@@ -129,7 +129,7 @@ h1 {
 }
 
 h2 {
-    font-size: var(--fs-medium);
+    font-size: var(--fs-large);
     color: var(--text-white);
     margin-bottom: var(--spacing-xxl);
     text-shadow: 
@@ -161,7 +161,7 @@ h2 {
 }
 
 .story-text {
-    font-size: var(--fs-large);
+    font-size: var(--fs-medium);
     color: var(--text-white);
     line-height: 1.6;
     max-width: 600px;
@@ -775,7 +775,7 @@ h2 {
     }
 
     .story-text {
-        font-size: var(--fs-large);
+        font-size: var(--fs-medium);
         padding: 0 var(--spacing-md);
     }
 
