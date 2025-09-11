@@ -1019,6 +1019,17 @@ textarea:focus {
         width: 90px;
         height: 90px;
     }
+
+    .floating-confetti,
+    .birthday-scene,
+    .page h1,
+    .page h2 {
+        animation-duration: 6s;
+    }
+    
+    .floating-confetti {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {

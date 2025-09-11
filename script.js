@@ -353,7 +353,7 @@ class BirthdayInvitationController {
 
     // Floating Confetti with performance limits
     startFloatingBalloons() {
-        const MAX_CONFETTI = 50;
+        const MAX_CONFETTI = 15;
         const { balloonsContainer } = this.elements;
         
         if (!balloonsContainer) return;
