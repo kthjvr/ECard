@@ -123,9 +123,6 @@ class BirthdayInvitationController {
     smoothScrollToStorybook(storybook) {
         this.rafId = requestAnimationFrame(() => {
             storybook.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(() => {
-                window.scrollBy({ top: 800, behavior: 'smooth' });
-            }, 1000);
         });
     }
 
@@ -373,7 +370,7 @@ class BirthdayInvitationController {
                 if (piece.parentNode) {
                     piece.remove();
                     this.currentConfettiCount--;
-                }
+                }z
             }, 6000);
         };
 
