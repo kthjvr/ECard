@@ -466,11 +466,11 @@ body::-webkit-scrollbar {
     z-index: var(--z-header);
 }
 
-.open .lid.one {
+.open.lid.one {
     transform: rotateX(90deg);
 }
 
-.open .lid.two {
+.open.lid.two {
     transform: rotateX(180deg);
 }
 

@@ -105,7 +105,7 @@ class BirthdayInvitationController {
 
     animateEnvelopeOpening(lid, letter, storybook) {
         // Animate flap opening
-        lid.classList.add('opened');
+        lid.classList.add('open');
         setTimeout(() => {
             letter.classList.add('visible');
         }, 500);
