@@ -300,7 +300,7 @@ class BirthdayInvitationController {
             const particleCount = Math.floor(30 * (timeLeft / duration));
             this.createConfettiBurst(particleCount, colors, 0.1, 0.3);
             this.createConfettiBurst(particleCount, colors, 0.7, 0.9);
-        }, 250);
+        }, 1250);
 
         // Delayed special effects
         setTimeout(() => this.createSpecialConfetti(colors), 1000);
@@ -370,7 +370,7 @@ class BirthdayInvitationController {
                 if (piece.parentNode) {
                     piece.remove();
                     this.currentConfettiCount--;
-                }z
+                }
             }, 6000);
         };
 

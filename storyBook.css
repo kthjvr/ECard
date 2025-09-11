@@ -52,7 +52,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(
+    /* background: conic-gradient(
         from 0deg,
         transparent,
         rgba(255, 46, 146, 0.1) 10%,
@@ -67,7 +67,7 @@
         transparent
     );
     animation: demonAura 20s linear infinite;
-    will-change: transform, opacity;
+    will-change: transform, opacity; */
     pointer-events: none;
     z-index: 0;
 }
@@ -97,11 +97,12 @@
     opacity: 1;
     transform: translateX(0) scale(1);
     animation: pageGlow 3s ease-in-out infinite alternate;
-    will-change: transform, opacity;
+    /* will-change: transform, opacity; */
 }
 
 .page.prev {
     transform: translateX(-100px) scale(0.95);
+    -webkit-filter: blur(2px);
     filter: blur(2px);
 }
 
@@ -209,8 +210,8 @@ h2 {
     box-shadow: 
         0 0 20px rgba(255, 46, 146, 0.8),
         0 0 40px rgba(75, 201, 255, 0.6);
-    animation: progressGlow 2s ease-in-out infinite alternate;
-    will-change: transform, opacity;
+    animation: progressGlow 6s ease-in-out infinite alternate;
+    /* will-change: transform, opacity; */
     position: relative;
 }
 
@@ -225,8 +226,8 @@ h2 {
         transparent, 
         rgba(255, 255, 255, 0.6), 
         transparent);
-    animation: progressSweep 2s ease-in-out infinite;
-    will-change: transform, opacity;
+    animation: progressSweep 6s ease-in-out infinite;
+    /* will-change: transform, opacity; */
 }
 
 /* ===================================
@@ -244,7 +245,6 @@ h2 {
 
 .book-photo {
     animation: hunterFloat 3s ease-in-out infinite, photoGlow 4s ease-in-out infinite alternate;
-    will-change: transform, opacity;
     border-radius: var(--radius-xxl);
     width: 40%;
     height: auto;
@@ -254,6 +254,7 @@ h2 {
         0 0 30px rgba(255, 46, 146, 0.5),
         0 0 60px rgba(75, 201, 255, 0.3),
         inset 0 0 20px rgba(255, 255, 255, 0.1);
+    -webkit-filter: brightness(1.1) contrast(1.2);
     filter: brightness(1.1) contrast(1.2);
     position: relative;
 }
