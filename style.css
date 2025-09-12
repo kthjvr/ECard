@@ -42,7 +42,7 @@
     --shadow-card: 0 0 20px rgba(255, 46, 146, 0.4);
 
     /* Typography */
-    --font-family: "Orbitron", "Poppins", sans-serif;
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     --font-weight-light: 300;
     --font-weight-regular: 400;
     --font-weight-medium: 500;
@@ -107,7 +107,6 @@ body {
     background: var(--bg-gradient);
     background-size: 400% 400%;
     animation: gradientShift 8s ease infinite;
-    will-change: transform, opacity;
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -316,11 +315,15 @@ body::-webkit-scrollbar {
     justify-content: center;
     align-items: center;
     z-index: var(--z-loading);
-    transition: opacity var(--transition-slow);
+    /* transition: opacity var(--transition-slow); */
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.6s ease, visibility 0s linear 0.6s;
 }
 
 .loading-screen.hidden {
     opacity: 0;
+    visibility: hidden;
     pointer-events: none;
 }
 
@@ -369,7 +372,6 @@ body::-webkit-scrollbar {
     height: 14px;
     background: hsl(var(--hue), 80%, 60%);
     animation: confettiFall 6s linear forwards;
-    will-change: transform, opacity;
     pointer-events: none;
 }
 
@@ -393,7 +395,6 @@ body::-webkit-scrollbar {
     max-width: 180px;
     margin-bottom: var(--spacing-sm);
     animation: float 4s ease-in-out infinite;
-    will-change: transform, opacity;
     border-radius: 24px;
 }
 
@@ -403,7 +404,6 @@ body::-webkit-scrollbar {
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
     margin-bottom: var(--spacing-md);
     animation: titleBounce 3s ease-in-out infinite;
-    will-change: transform, opacity;
     font-weight: var(--font-weight-bold);
 }
 
@@ -417,7 +417,6 @@ body::-webkit-scrollbar {
 .pulse-indicator {
     font-size: var(--fs-icon-large);
     animation: bounce 2s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
@@ -428,7 +427,6 @@ body::-webkit-scrollbar {
     z-index: var(--z-header);
     position: relative;
     animation: musicPulse 3s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 .wrapper {
@@ -473,11 +471,11 @@ body::-webkit-scrollbar {
     z-index: var(--z-header);
 }
 
-.open .lid.one {
+.open.lid.one {
     transform: rotateX(90deg);
 }
 
-.open .lid.two {
+.open.lid.two {
     transform: rotateX(180deg);
 }
 
@@ -531,14 +529,13 @@ body::-webkit-scrollbar {
 .party-elements {
     font-size: var(--fs-icon);
     animation: celebrate 1.5s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
    INVITATION CARD
    =================================== */
 .invitation-card {
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
     background: var(--glass-bg);
     -webkit-backdrop-filter: blur(15px);
@@ -548,7 +545,6 @@ body::-webkit-scrollbar {
     box-shadow: var(--glass-shadow);
     display: none;
     animation: slideInUp var(--transition-extra-slow) ease forwards;
-    will-change: transform, opacity;
     z-index: var(--z-header);
     position: relative;
     margin-bottom: var(--spacing-xxl);
@@ -575,7 +571,6 @@ body::-webkit-scrollbar {
     font-size: var(--fs-icon-large);
     letter-spacing: var(--spacing-md);
     animation: partyTime 2s ease-in-out infinite;
-    will-change: transform, opacity;
 }
 
 /* ===================================
@@ -779,9 +774,10 @@ body::-webkit-scrollbar {
    ACTION BUTTONS
    =================================== */
 .actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-md);
+    justify-content: center;
     margin-bottom: var(--spacing-xl);
 }
 .actions p{
@@ -791,7 +787,7 @@ body::-webkit-scrollbar {
 }
 .rsvp-btn,
 .share-btn {
-    padding: 16px var(--spacing-lg);
+    padding: 14px 24px;
     border: none;
     border-radius: var(--radius-lg);
     font-family: inherit;
@@ -802,8 +798,10 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     gap: var(--spacing-sm);
-    transition: all var(--transition-normal);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
     text-decoration: none;
+    min-width: 180px; /* optional: consistent button width */
+    flex: 1 1 auto;   /* responsive flex-grow and shrink */
 }
 
 .primary {
@@ -830,7 +828,9 @@ body::-webkit-scrollbar {
 
 .btn-icon {
     font-size: var(--fs-large);
+    display: inline-flex;
 }
+
 
 /* ===================================
    SPECIAL MESSAGE
@@ -919,7 +919,6 @@ body::-webkit-scrollbar {
     align-items: center;
     justify-content: center;
     animation: fadeIn var(--transition-normal) ease;
-    will-change: transform, opacity;
 }
 
 .modal-content {
@@ -1066,6 +1065,17 @@ textarea:focus {
     .dress-code-gallery img {
         width: 90px;
         height: 90px;
+    }
+
+    .floating-confetti,
+    .birthday-scene,
+    .page h1,
+    .page h2 {
+        animation-duration: 6s;
+    }
+
+    .floating-confetti {
+        display: none;
     }
 }
 

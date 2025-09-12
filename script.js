@@ -7,12 +7,12 @@ class BirthdayInvitationController {
         this.currentPage = 0;
         this.floatingConfettiInterval = null;
         this.currentConfettiCount = 0;
-        
+
         this.rafId = null;
         this.isAnimating = false;
         this.throttledResize = this.throttle(this.handleResize.bind(this), 250);
         this.elements = {};
-        
+
         this.init();
     }
 
@@ -21,20 +21,21 @@ class BirthdayInvitationController {
         this.setupLoadingScreen();
         this.setupEventListeners();
         this.setupCountdown();
-        this.startFloatingBalloons();
+        // this.startFloatingBalloons();
         this.setupTouchSupport();
     }
 
     // Cache frequently used DOM elements
     cacheElements() {
         const elementIds = [
-            'loadingScreen', 'mainContent', 'envelope', 'lid', 'letter', 
-            'lid1', 'storybook', 'inviteDetails', 'musicBtn', 'rsvpBtn', 
+            'loadingScreen', 'mainContent', 'envelope', 'lid', 'letter',
+            'lid1', 'storybook', 'inviteDetails', 'musicBtn', 'rsvpBtn',
             'shareBtn', 'openSound', 'bgMusic', 'rsvpModal', 'shareModal',
             'closeModal', 'closeShareModal', 'progressBar', 'giftBoxBtn',
-            'giftBoxLid', 'jumpCharacter', 'days', 'hours', 'balloonsContainer'
+            'giftBoxLid', 'jumpCharacter', 'days', 'hours', 'balloonsContainer',
+            'invitationList'
         ];
-        
+
         elementIds.forEach(id => {
             this.elements[id] = document.getElementById(id);
         });
@@ -43,31 +44,29 @@ class BirthdayInvitationController {
     // Loading Screen
     setupLoadingScreen() {
         const { loadingScreen, mainContent } = this.elements;
-        
+
         const showMainContent = () => {
             loadingScreen.classList.add('hidden');
             mainContent.classList.add('visible');
-            
-            this.rafId = requestAnimationFrame(() => {
-                setTimeout(() => {
-                    if (loadingScreen.parentNode) {
-                        loadingScreen.remove();
-                    }
-                }, 500);
-            });
+
+            setTimeout(() => {
+                loadingScreen.remove();
+            }, 700);
         };
-        
-        setTimeout(showMainContent, 2500);
+
+        // Hide loader as soon as everything is ready
+        window.addEventListener('load', showMainContent);
     }
+
 
     //  Event Listeners Setup
     setupEventListeners() {
         const { envelope, musicBtn, rsvpBtn, shareBtn } = this.elements;
-        
+
         // Use passive listeners where possible
         envelope.addEventListener('click', this.openEnvelope.bind(this), { passive: true });
         envelope.addEventListener('keydown', this.handleEnvelopeKeydown.bind(this));
-        
+
         musicBtn.addEventListener('click', this.toggleMusic.bind(this), { passive: true });
         rsvpBtn.addEventListener('click', this.openRSVPModal.bind(this), { passive: true });
         shareBtn.addEventListener('click', this.openShareModal.bind(this), { passive: true });
@@ -93,10 +92,10 @@ class BirthdayInvitationController {
 
         this.isAnimating = true;
         this.isEnvelopeOpened = true;
-        
+
         const { envelope, lid, letter, openSound, lid1, storybook } = this.elements;
         if (lid1) lid1.style.display = 'none';
-        
+
         // Disable envelope interaction
         envelope.style.pointerEvents = 'none';
         this.playSound(openSound);
@@ -105,7 +104,7 @@ class BirthdayInvitationController {
 
     animateEnvelopeOpening(lid, letter, storybook) {
         // Animate flap opening
-        lid.classList.add('opened');
+        lid.classList.add('open');
         setTimeout(() => {
             letter.classList.add('visible');
         }, 500);
@@ -123,9 +122,6 @@ class BirthdayInvitationController {
     smoothScrollToStorybook(storybook) {
         this.rafId = requestAnimationFrame(() => {
             storybook.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(() => {
-                window.scrollBy({ top: 800, behavior: 'smooth' });
-            }, 1000);
         });
     }
 
@@ -138,10 +134,11 @@ class BirthdayInvitationController {
     }
 
     showInvitationAfterStory() {
-        const { inviteDetails } = this.elements;
-        
+        const { inviteDetails, invitationList } = this.elements;
+
         setTimeout(() => {
             inviteDetails.classList.add('visible');
+            invitationList.classList.add('visible');
             setTimeout(() => {
                 window.scrollBy({ top: 800, behavior: 'smooth' });
             }, 100);
@@ -193,14 +190,14 @@ class BirthdayInvitationController {
 
                 setTimeout(() => {
                     updateGiftBoxState({ jump: "jump" });
-                    this.triggerBirthdayConfetti();
+                    // this.triggerBirthdayConfetti();
                 }, 300);
 
                 setTimeout(() => {
                     updateGiftBoxState({ rotated: "rotated" });
                     nextPage();
-                    setTimeout(closeGiftBox, 1300);
-                }, 1000);
+                    setTimeout(closeGiftBox, 700);
+                }, 700);
             } else {
                 updateGiftBoxState(initState);
                 nextPage();
@@ -287,8 +284,8 @@ class BirthdayInvitationController {
     // Birthday Confetti
     triggerBirthdayConfetti() {
         if (!window.confetti) return;
-        
-        const duration = 2000;
+
+        const duration = 500;
         const animationEnd = Date.now() + duration;
         const colors = ['#ff6b35', '#ffd23f', '#4ecdc4', '#45b7d1', '#fd79a8', '#6c5ce7'];
 
@@ -303,7 +300,7 @@ class BirthdayInvitationController {
             const particleCount = Math.floor(30 * (timeLeft / duration));
             this.createConfettiBurst(particleCount, colors, 0.1, 0.3);
             this.createConfettiBurst(particleCount, colors, 0.7, 0.9);
-        }, 250);
+        }, 1250);
 
         // Delayed special effects
         setTimeout(() => this.createSpecialConfetti(colors), 1000);
@@ -327,7 +324,7 @@ class BirthdayInvitationController {
     createSpecialConfetti(colors) {
         if (window.confetti) {
             confetti({
-                particleCount: 100,
+                particleCount: 50,
                 spread: 100,
                 origin: { y: 0.6 },
                 shapes: ['circle'],
@@ -353,20 +350,20 @@ class BirthdayInvitationController {
 
     // Floating Confetti with performance limits
     startFloatingBalloons() {
-        const MAX_CONFETTI = 50;
+        const MAX_CONFETTI = 15;
         const { balloonsContainer } = this.elements;
-        
+
         if (!balloonsContainer) return;
 
         const createConfetti = () => {
             if (this.currentConfettiCount >= MAX_CONFETTI) return;
-            
+
             this.currentConfettiCount++;
             const piece = document.createElement('div');
             piece.className = 'floating-confetti';
             piece.style.left = Math.random() * 100 + '%';
             piece.style.setProperty('--hue', Math.floor(Math.random() * 360));
-            
+
             balloonsContainer.appendChild(piece);
 
             setTimeout(() => {
@@ -387,7 +384,7 @@ class BirthdayInvitationController {
     setupCountdown() {
         const eventDate = new Date("Nov 02, 2025 18:00:00").getTime();
         const { days: daysEl, hours: hoursEl } = this.elements;
-        
+
         if (!daysEl || !hoursEl) return;
 
         const updateCountdown = () => {
@@ -447,7 +444,7 @@ class BirthdayInvitationController {
     // Music Controls
     toggleMusic() {
         const { musicBtn, bgMusic } = this.elements;
-        
+
         if (this.isMusicPlaying) {
             bgMusic.pause();
             musicBtn.classList.remove('playing');
@@ -472,26 +469,40 @@ class BirthdayInvitationController {
 
     // Modal Management
     setupModals() {
-        const { closeModal, shareModal, closeShareModal } = this.elements;
-        
-        if (!shareModal) return;
-        closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
+        const { rsvpModal, closeModal, shareModal, closeShareModal } = this.elements;
 
-        [shareModal].forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    this.closeModal(modal);
+        // RSVP modal close
+        if (closeModal) {
+            closeModal.addEventListener('click', () => this.closeModal(rsvpModal), { passive: true });
+        }
+        if (rsvpModal) {
+            rsvpModal.addEventListener('click', (e) => {
+                if (e.target === rsvpModal) {
+                    this.closeModal(rsvpModal);
                 }
             }, { passive: true });
-        });
+        }
 
-        // Single keydown listener for all modals
+        // Share modal close
+        if (closeShareModal) {
+            closeShareModal.addEventListener('click', () => this.closeModal(shareModal), { passive: true });
+        }
+        if (shareModal) {
+            shareModal.addEventListener('click', (e) => {
+                if (e.target === shareModal) {
+                    this.closeModal(shareModal);
+                }
+            }, { passive: true });
+        }
+
+        // Escape key closes whichever is open
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                this.closeModal(shareModal);
+                [rsvpModal, shareModal].forEach(m => this.closeModal(m));
             }
         });
     }
+
 
     openRSVPModal() {
         const modal = this.elements.rsvpModal;
@@ -565,14 +576,14 @@ class BirthdayInvitationController {
         document.body.appendChild(textArea);
         textArea.focus();
         textArea.select();
-        
+
         try {
             document.execCommand('copy');
             this.showNotification('Link copied to clipboard! 📋', 'success');
         } catch (err) {
             this.showNotification('Failed to copy link', 'error');
         }
-        
+
         document.body.removeChild(textArea);
     }
 
@@ -596,7 +607,7 @@ class BirthdayInvitationController {
     // Throttle utility for performance
     throttle(func, limit) {
         let inThrottle;
-        return function() {
+        return function () {
             const args = arguments;
             const context = this;
             if (!inThrottle) {
@@ -630,8 +641,8 @@ class BirthdayInvitationController {
         notification.className = `notification notification-${type}`;
         notification.innerHTML = `<div class="notification-content">${message}</div>`;
 
-        const bgColor = type === 'success' ? 
-            'linear-gradient(135deg, #4CAF50, #45a049)' : 
+        const bgColor = type === 'success' ?
+            'linear-gradient(135deg, #4CAF50, #45a049)' :
             'linear-gradient(135deg, #ff6b35, #ff8566)';
 
         notification.style.cssText = `
@@ -673,7 +684,7 @@ class BirthdayInvitationController {
         if (this.floatingConfettiInterval) {
             clearInterval(this.floatingConfettiInterval);
         }
-        
+
         // Cancel animation frames
         if (this.rafId) {
             cancelAnimationFrame(this.rafId);
@@ -726,6 +737,66 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, { passive: true });
     }
+
+    // google calendar
+    const calendarBtn = document.getElementById('calendarBtn');
+    calendarBtn.addEventListener('click', () => {
+        const title = encodeURIComponent("Damaris Alexa's 7th Birthday Celebration");
+        const details = encodeURIComponent("Come celebrate with us! 🎉");
+        const location = encodeURIComponent("Captain's Place (Private Pool and Events Place), 24XP+J63, Malvar, Batangas, Philippines");
+        
+        // Event start and end in format: YYYYMMDDTHHMMSSZ
+        const startDate = "20251102T100000Z"; // Nov 2, 2025, 10:00am UTC
+        const endDate = "20251102T140000Z";   // Nov 2, 2025, 2:00pm UTC
+
+        const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}&sf=true&output=xml`;
+
+        window.open(googleCalendarUrl, "_blank");
+    });
+
+
+    // particle bg
+    tsParticles.load("tsparticles", {
+        fpsLimit: 30,
+        particles: {
+            color: {
+                value: "#ffffff"
+            },
+            move: {
+                enable: true,
+                speed: 0.5,
+                direction: "none",
+                random: true,
+                straight: false,
+                outModes: {
+                    default: "out"
+                }
+            },
+            number: {
+                value: 100
+            },
+            opacity: {
+                value: {
+                    min: 0.1,
+                    max: 1
+                },
+                animation: {
+                    enable: true,
+                    speed: 1,
+                    minimumValue: 0.1
+                }
+            },
+            shape: {
+                type: "circle"
+            },
+            size: {
+                value: {
+                    min: 0.5,
+                    max: 2
+                }
+            }
+        }
+    });
 });
 
 //notification styles
