@@ -784,7 +784,11 @@ body::-webkit-scrollbar {
     gap: var(--spacing-md);
     margin-bottom: var(--spacing-xl);
 }
-
+.actions p{
+    color: var(--text-light);
+    margin: 0;
+    line-height: 1.5;
+}
 .rsvp-btn,
 .share-btn {
     padding: 16px var(--spacing-lg);
