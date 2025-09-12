@@ -626,6 +626,49 @@ body::-webkit-scrollbar {
 }
 
 /* ===================================
+   SPECIAL MENTIONS
+   =================================== */
+
+.special-mentions {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-lg);
+    padding: 18px;
+    background: var(--accent-gradient);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid var(--primary-pink);
+    transition: all var(--transition-normal);
+}
+
+.special-mentions:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 25px var(--glass-border);
+}
+
+.special-mentions .icon {
+    font-size: var(--fs-icon);
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.special-mentions strong {
+    color: var(--primary-blue);
+    font-size: var(--fs-medium);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.special-mentions p {
+    color: var(--text-dark);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.special-mentions small {
+    color: var(--text-light);
+    font-size: var(--fs-small);
+}
+/* ===================================
    DRESS CODE GALLERY
    =================================== */
 .dress-code-gallery {
