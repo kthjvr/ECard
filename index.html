@@ -80,17 +80,19 @@
         <!-- Jump Character -->
         <div class="jump-character" id="jumpCharacter">
           <img src="https://ik.imagekit.io/e3wiv79bq/character.png" alt="jump character"
-            style="width: 100%; height: 100%;" loading="lazy"/>
+            style="width: 100%; height: 100%;" loading="lazy" />
         </div>
 
         <!-- Gift Box Button -->
         <button type="button" title="giftBox" class="box" id="giftBoxBtn">
-          <img src="https://ik.imagekit.io/e3wiv79bq/box.png" alt="box" style="width: 100%; height: 100%;" loading="lazy"/>
+          <img src="https://ik.imagekit.io/e3wiv79bq/box.png" alt="box" style="width: 100%; height: 100%;"
+            loading="lazy" />
         </button>
 
         <!-- Gift Box Lid -->
         <div class="gift-lid" id="giftBoxLid">
-          <img src="https://ik.imagekit.io/e3wiv79bq/lid.png" alt="box gift-lid" style="width: 100%; height: 100%;" loading="lazy"/>
+          <img src="https://ik.imagekit.io/e3wiv79bq/lid.png" alt="box gift-lid" style="width: 100%; height: 100%;"
+            loading="lazy" />
         </div>
       </div>
 
@@ -99,7 +101,7 @@
         <h1>My Birthday Adventure</h1>
         <img src="https://ik.imagekit.io/e3wiv79bq/cover.png" alt="First Birthday" class="book-photo" loading="lazy">
         <p class="story-text">Come along on a magical journey of my life and see what you might have missed from my
-         
+
           birthdays!</p>
       </div>
 
@@ -151,7 +153,8 @@
       <div class="page" data-page="7"
         onload="this.closest('.storybook-container').dispatchEvent(new CustomEvent('storyComplete'))">
         <h2>Time to Celebrate! 🎉✨</h2>
-        <img src="https://ik.imagekit.io/e3wiv79bq/final-cover.png" alt="First Birthday" class="book-photo" loading="lazy">
+        <img src="https://ik.imagekit.io/e3wiv79bq/final-cover.png" alt="First Birthday" class="book-photo"
+          loading="lazy">
         <p class="story-text">
           Get your party hats on, grab the confetti, and let’s make this next birthday the happiest one yet! 🥳
         </p>
@@ -181,12 +184,12 @@
               <small>Malvar, Batangas</small>
             </p>
             <div id="map">
-              <iframe
+              <iframe title="map"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4656.66708953913!2d121.1329733758458!3d14.04901398637461!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd6f0013a95c6d%3A0xbb25fb40d9416062!2sCaptain&#39;s%20Place%20(Private%20Pool%20and%20Events%20Place)!5e1!3m2!1sen!2sph!4v1757579424131!5m2!1sen!2sph"
                 width="200" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
+                referrerpolicy="no-referrer-when-downgrade" class="form">
               </iframe>
-            </div>       
+            </div>
           </div>
         </div>
 
@@ -219,6 +222,7 @@
             </div>
           </div>
         </div>
+
         <div class="special-mentions">
           <span class="icon">💵</span>
           <div>
@@ -231,16 +235,15 @@
             <p>🎈 Daphine May Pangilinan</p>
           </div>
         </div>
+
         <div class="actions">
           <p>Please send us some response.</p>
-          <iframe width=100%;
+          <iframe title="google-form" class="form" width=100%;
             src="https://docs.google.com/forms/d/e/1FAIpQLScVGWC_jCXUDb_4UrE8DApom-JKqKjcGl25gMRNLkqi4xoHdA/viewform?embedded=true"
-            height="450" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-          <button
-            onclick="window.open('https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=N29iMWs5Zmx1Y2t0ZGdsc2pyMDMyOHNjc3YgYWxleGFuZGVyLnYucGFuZ2lsaW5hbkBt&tmsrc=alexander.v.pangilinan%40gmail.com')"
-            class="share-btn secondary">
-            <span class="btn-icon">📅</span>
-            Add To Calendar
+            height="650" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <button type="button" class="google-btn primary" id="calendarBtn">
+            <span class="btn-icon">📝</span>
+            Add to Calendar
           </button>
           <button type="button" class="share-btn secondary" id="shareBtn">
             <span class="btn-icon">📤</span>
@@ -427,7 +430,7 @@
       <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
         <h3>🎉 RSVP for the Party!</h3>
-        <iframe
+        <iframe title="form"
           src="https://docs.google.com/forms/d/e/1FAIpQLScVGWC_jCXUDb_4UrE8DApom-JKqKjcGl25gMRNLkqi4xoHdA/viewform?embedded=true"
           width="100%" height="450" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
       </div>
