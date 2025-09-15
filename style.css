@@ -801,9 +801,10 @@ body::-webkit-scrollbar {
 }
 
 .actions p {
-    color: var(--text-light);
-    margin: 0;
-    line-height: 1.5;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--fs-medium);
+    color: var(--text-white);
+    text-align: left;
 }
 
 .rsvp-btn,
@@ -876,7 +877,14 @@ body::-webkit-scrollbar {
     font-weight: var(--font-weight-semibold);
     font-size: var(--fs-medium);
 }
-
+.special-message p {
+    background-clip: text;
+    font-style: italic;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--fs-medium);
+    color: var(--text-white);
+    text-align: left;
+}
 /* ===================================
    MUSIC CONTROLS
    =================================== */
