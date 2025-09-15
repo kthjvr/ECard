@@ -44,16 +44,6 @@
   <!-- Main Content -->
   <main class="main-content" id="mainContent">
     <div class="balloons-container" id="balloonsContainer"></div>
-
-      <button class="calendar-btn" onclick="downloadICS()">
-        📅 Add to Calendar
-      </button>
-
-      <a href="data:text/calendar;charset=utf-8,BEGIN:VCALENDAR%0AVERSION:2.0%0ABEGIN:VEVENT%0ASUMMARY:Test Event%0ADTSTART:20251102T020000Z%0ADTEND:20251102T060000Z%0AEND:VEVENT%0AEND:VCALENDAR" target="_blank">
-        📅 Add to Calendar
-      </a>
-
-
     <!-- Header  -->
     <div class="header-section">
       <img src="https://ik.imagekit.io/e3wiv79bq/huntrix-cake.png" alt="Birthday Banner" class="header-image">
@@ -467,43 +457,6 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer></script>
   <script src="script.js" defer></script>
-  <script>
-    function downloadICS() {
-        // Event details
-        const title = "Damaris Alexa\\'s Birthday";
-        const description = "Come celebrate with us! 🎉";
-        const location = "Captain\\'s Place (Private Pool and Events Place)\\, 24XP+J63\\, Malvar\\, Batangas\\, Philippines";
-        const start = "20251102T020000Z";
-        const end = "20251102T060000Z";
-
-        // Build ICS file
-      const icsContent = [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH",
-        "BEGIN:VEVENT",
-        `UID:${Date.now()}@yourdomain.com`,
-        `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
-        `DTSTART:${start}`,
-        `DTEND:${end}`,
-        `SUMMARY:${title}`,
-        `DESCRIPTION:${description.replace(/\n/g, "\\n")}`,
-        `LOCATION:${location.replace(/,/g, "\\,")}`,
-        "END:VEVENT",
-        "END:VCALENDAR"
-      ].join("\r\n");
-
-      // Create a downloadable file
-      const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${title.replace(/\s+/g, "_")}.ics`;
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-  </script>
 </body>
 
 </html>
