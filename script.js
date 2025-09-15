@@ -21,7 +21,6 @@ class BirthdayInvitationController {
         this.setupLoadingScreen();
         this.setupEventListeners();
         this.setupCountdown();
-        // this.startFloatingBalloons();
         this.setupTouchSupport();
     }
 
@@ -68,7 +67,7 @@ class BirthdayInvitationController {
         envelope.addEventListener('keydown', this.handleEnvelopeKeydown.bind(this));
 
         musicBtn.addEventListener('click', this.toggleMusic.bind(this), { passive: true });
-        rsvpBtn.addEventListener('click', this.openRSVPModal.bind(this), { passive: true });
+        // rsvpBtn.addEventListener('click', this.openRSVPModal.bind(this), { passive: true });
         shareBtn.addEventListener('click', this.openShareModal.bind(this), { passive: true });
 
         this.setupModals();
@@ -744,10 +743,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const title = encodeURIComponent("Damaris Alexa's 7th Birthday Celebration");
         const details = encodeURIComponent("Come celebrate with us! 🎉");
         const location = encodeURIComponent("Captain's Place (Private Pool and Events Place), 24XP+J63, Malvar, Batangas, Philippines");
-        
+
         // Event start and end in format: YYYYMMDDTHHMMSSZ
-        const startDate = "20251102T100000Z"; // Nov 2, 2025, 10:00am UTC
-        const endDate = "20251102T140000Z";   // Nov 2, 2025, 2:00pm UTC
+        const startDate = "20251102T020000Z"; // Nov 2, 2025, 10:00am PHT
+        const endDate = "20251102T060000Z";   // Nov 2, 2025, 2:00pm PHT
 
         const googleCalendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}&sf=true&output=xml`;
 
