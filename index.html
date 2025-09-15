@@ -45,6 +45,10 @@
   <main class="main-content" id="mainContent">
     <div class="balloons-container" id="balloonsContainer"></div>
 
+      <button class="calendar-btn" onclick="downloadICS()">
+        📅 Add to Calendar
+      </button>
+
     <!-- Header  -->
     <div class="header-section">
       <img src="https://ik.imagekit.io/e3wiv79bq/huntrix-cake.png" alt="Birthday Banner" class="header-image">
@@ -53,7 +57,6 @@
       <p class="subtitle">Tap the envelope below to reveal your party invitation</p>
       <div class="pulse-indicator">👇</div>
     </div>
-
 
     <!-- Interactive Envelope -->
     <div class="envelope-container">
@@ -220,11 +223,15 @@
         </div>
 
         <div class="actions">
-          <button type="button" class="rsvp-btn primary" id="rsvpBtn">
-            <span class="btn-icon">📝</span>
-            Please send us response
-          </button>
-          <button type="button" class="rsvp-btn primary" id="calendarBtn">
+          <p>Please send us some response.</p>
+          <iframe title="google-form" class="form" width="100%"
+            src="https://docs.google.com/forms/d/e/1FAIpQLScVGWC_jCXUDb_4UrE8DApom-JKqKjcGl25gMRNLkqi4xoHdA/viewform?embedded=true"
+            height="650" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <div class="responsive-iframe-container small-container">
+              <iframe title="google-calendar" src="http://www.google.com/calendar/embed?showNav=0&showPrint=0&showCalendars=0&mode=DAY&wkst=1&src=17aef4b9a05f034527e3d3515c62d27b5c55ffec2c65ec05b70e531071495c36@group.calendar.google.com&dates=20251102%2F20251102" 
+              style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+          </div>
+          <button type="button" class="google-btn primary" id="calendarBtn">
             <span class="btn-icon">📝</span>
             Add to Calendar
           </button>
@@ -451,6 +458,39 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js" defer></script>
   <script src="script.js" defer></script>
+  <script>
+    function downloadICS() {
+        // Event details
+        const title = "Damaris Alexa's 7'th Birthday";
+        const description = "Come celebrate with us! 🎉";
+        const location = "Captain's Place (Private Pool and Events Place), 24XP+J63, Malvar, Batangas, Philippines";
+        const start = "20251102T020000Z";
+        const end = "20251102T060000Z";
+
+        // Build ICS file
+        const icsContent = `
+          BEGIN:VCALENDAR
+          VERSION:2.0
+          BEGIN:VEVENT
+          SUMMARY:${title}
+          DTSTART:${start}
+          DTEND:${end}
+          DESCRIPTION:${description}
+          LOCATION:${location}
+          END:VEVENT
+          END:VCALENDAR
+                `.trim();
+
+      // Create a downloadable file
+      const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${title.replace(/\s+/g, "_")}.ics`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
 </body>
 
 </html>
