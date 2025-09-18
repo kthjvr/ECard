@@ -43,7 +43,7 @@ class LoadingScreen {
     preloadResources() {
         const imagesToPreload = [
             'https://ik.imagekit.io/e3wiv79bq/huntrix-cake.png',
-            'https://ik.imagekit.io/e3wiv79bq/invitation-preview.png'
+            'https://ik.imagekit.io/e3wiv79bq/invitation-preview.png',
         ];
 
         const promises = imagesToPreload.map(src => {
@@ -375,13 +375,29 @@ class StoryBook {
         ];
         
         this.currentStory = 0;
+        this.imageCache = new Map();
         this.init();
+        this.preloadImages();
     }
 
     init() {
         this.initializeIndicators();
         this.setupNextButton();
         this.setupIntersectionObserver();
+    }
+
+    preloadImages() {
+        this.stories.forEach((story, index) => {
+            const img = new Image();
+            img.onload = () => {
+                this.imageCache.set(index, img);
+                // console.log(`Preloaded story ${index + 1} image`);
+            };
+            img.onerror = () => {
+                console.warn(`Failed to load story ${index + 1} image:`, story.image);
+            };
+            img.src = story.image;
+        });
     }
 
     initializeIndicators() {
@@ -428,7 +444,15 @@ class StoryBook {
             const story = this.stories[this.currentStory];
             
             elements.storyTitle.textContent = story.title;
-            elements.storyImage.src = story.image;
+            
+            // Use cached image
+            const cachedImg = this.imageCache.get(this.currentStory);
+            if (cachedImg) {
+                elements.storyImage.src = cachedImg.src;
+            } else {
+                elements.storyImage.src = story.image;
+            }
+            
             elements.storyImage.alt = `Story illustration ${this.currentStory + 1}`;
             elements.storyText.textContent = story.text;
 
