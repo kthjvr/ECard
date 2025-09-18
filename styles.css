@@ -485,7 +485,7 @@ html {
 .story-image-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 1;
+    /* aspect-ratio: 1; */
     max-width: 400px;
     margin: 0 auto;
     overflow: hidden;
@@ -495,7 +495,7 @@ html {
 .story-image {
     width: 100%;
     height: 100%;
-    object-fit:cover;
+    object-fit: cover;
     object-position: center;
     transition: transform 0.3s ease;
 }
