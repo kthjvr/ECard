@@ -339,32 +339,32 @@ class StoryBook {
             },
             {
                 title: "My First Birthday! 🎂",
-                image: "/images/first.png",
+                image: "/images/first.jpg",
                 text: "One year old and ready to explore!"
             },
             {
                 title: "Two Years of Wonder! 🎈🎈",
-                image: "/images/second.png",
+                image: "/images/second.jpg",
                 text: "Two candles dancing in the breeze! I'm getting bigger and learning so many new things every day."
             },
             {
                 title: "Three and Free! 🌟🌟🌟",
-                image: "/images/third.png",
+                image: "/images/third.jpg",
                 text: "Three years of adventures! I can run, jump, and play."
             },
             {
                 title: "Fantastic Four! 🚀🚀🚀🚀",
-                image: "/images/fourth.png",
+                image: "/images/fourth.jpg",
                 text: "Four candles glowing bright!"
             },
             {
                 title: "High Five for Five! 🖐️",
-                image: "/images/fifth.png",
+                image: "/images/fifth.jpg",
                 text: "Five years of growing and learning! I'm getting ready for big adventures and maybe even school soon!"
             },
             {
                 title: "Super Six! 🦋🦋🦋🦋🦋🦋",
-                image: "/images/sixth.png",
+                image: "/images/sixth.jpg",
                 text: "Six wonderful years of birthdays!"
             },
             {
