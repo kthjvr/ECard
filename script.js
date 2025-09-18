@@ -383,6 +383,7 @@ class StoryBook {
     init() {
         this.initializeIndicators();
         this.setupNextButton();
+        this.setupBackButton();
         this.setupIntersectionObserver();
     }
 
@@ -427,13 +428,28 @@ class StoryBook {
         });
     }
 
+    setupBackButton() {
+        const nextButton = document.getElementById('backButton');
+        if (!nextButton) return;
+        
+        nextButton.addEventListener('click', () => {
+            if (this.currentStory < this.stories.length - 1) {
+                this.currentStory--;
+                this.updateStory();
+            } else {
+                console.log('Moving to next section...');
+            }
+        });
+    }
+
     updateStory() {
         const elements = {
             storyCard: document.getElementById('storyCard'),
             storyTitle: document.getElementById('storyTitle'),
             storyImage: document.getElementById('storyImage'),
             storyText: document.getElementById('storyText'),
-            nextButton: document.getElementById('nextButton')
+            nextButton: document.getElementById('nextButton'),
+            backButton: document.getElementById('backButton'),
         };
 
         if (!elements.storyCard) return;
@@ -455,9 +471,11 @@ class StoryBook {
             
             elements.storyImage.alt = `Story illustration ${this.currentStory + 1}`;
             elements.storyText.textContent = story.text;
+            document.getElementById('birthday-image').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
             this.updateIndicators();
             this.updateNextButton(elements.nextButton);
+            this.updateBackButton(elements.backButton);
             
             elements.storyCard.classList.remove('turning');
         }, 300);
@@ -473,8 +491,8 @@ class StoryBook {
     updateNextButton(button) {
         const isLastStory = this.currentStory === this.stories.length - 1;
         button.innerHTML = isLastStory 
-            ? `Continue to Party! <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`
-            : `Next <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`;
+            ? `Continue to Party! <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`
+            : `Next <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`;
         
         if (isLastStory) {
             const eventSection = document.getElementById('event-details')
@@ -492,6 +510,18 @@ class StoryBook {
 
             const footerSection = document.getElementById('footer-section')
             footerSection.classList.add('visible');
+        }
+
+    }
+
+    updateBackButton(button) {
+        const isLastStory = this.currentStory === this.stories.length - 1;
+        button.innerHTML = isLastStory 
+            ? `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Check it again`
+            : `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Back`;
+        
+        if (isLastStory) {
+            this.currentStory = 1;
         }
 
     }
@@ -669,6 +699,7 @@ class EnvelopeManager {
         this.letter = document.getElementById('letter');
         this.storybook = document.getElementById('story-section');
         this.openSound = document.getElementById('openSound');
+        this.nextButton = document.getElementById('nextButton');
         
         this.isEnvelopeOpened = false;
         this.isAnimating = false;
@@ -738,7 +769,7 @@ class EnvelopeManager {
     }
 
     smoothScrollToStorybook() {
-        this.storybook.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.nextButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
