@@ -769,7 +769,7 @@ class EnvelopeManager {
     }
 
     smoothScrollToStorybook() {
-        this.nextButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        this.nextButton.scrollIntoView({ behavior: 'smooth', block: 'end' });
     }
 }
 
