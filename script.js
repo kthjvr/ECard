@@ -471,7 +471,7 @@ class StoryBook {
             
             elements.storyImage.alt = `Story illustration ${this.currentStory + 1}`;
             elements.storyText.textContent = story.text;
-            document.getElementById('birthday-image').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            document.getElementById('story-section').scrollIntoView({ behavior: 'smooth', block: 'end' });
 
             this.updateIndicators();
             this.updateNextButton(elements.nextButton);

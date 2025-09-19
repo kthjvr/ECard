@@ -2306,6 +2306,11 @@ footer::before {
 
     .next-button {
         align-self: flex-end;
+        font-size: 16px;
+    }
+
+    .back-button {
+        font-size: 16px;
     }
 
     /* Event Details */
@@ -2565,6 +2570,11 @@ footer::before {
     }
 
     .next-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .back-button {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;
     }
