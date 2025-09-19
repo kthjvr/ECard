@@ -700,7 +700,7 @@ class EnvelopeManager {
         this.storybook = document.getElementById('story-section');
         this.openSound = document.getElementById('openSound');
         this.nextButton = document.getElementById('nextButton');
-        
+        this.storyCard = document.getElementById('storyCard'),
         this.isEnvelopeOpened = false;
         this.isAnimating = false;
         
@@ -769,7 +769,7 @@ class EnvelopeManager {
     }
 
     smoothScrollToStorybook() {
-        this.storybook.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        this.storyCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 }
 
