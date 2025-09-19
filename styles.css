@@ -2278,6 +2278,7 @@ footer::before {
     /* Stpry Book */
     #story-section {
         padding: 3rem 1rem;
+        min-height: 100vh;
     }
 
     .story-card {
