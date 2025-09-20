@@ -333,9 +333,9 @@ class StoryBook {
     constructor() {
         this.stories = [
             {
-                title: "My Birthday Adventure",
+                title: "The Beginning of My Story 🌟",
                 image: "https://ik.imagekit.io/e3wiv79bq/cover.png?updatedAt=1757587967248",
-                text: "Come along on a magical journey of my life and see what you might have missed from my birthdays!"
+                text: "Every great adventure starts with a single moment... and mine began the day I was born! This is where my birthday journey begins - a tale of growing up, making wishes, and celebrating the gift of another year around the sun!"
             },
             {
                 title: "My First Birthday! 🎂",
@@ -385,6 +385,11 @@ class StoryBook {
         this.setupNextButton();
         this.setupBackButton();
         this.setupIntersectionObserver();
+
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            this.updateBackButton(backButton);
+        }
     }
 
     preloadImages() {
@@ -406,40 +411,68 @@ class StoryBook {
         if (!indicator) return;
         
         indicator.innerHTML = '';
-        this.stories.forEach((_, index) => {
-            const dot = document.createElement('div');
-            dot.className = 'story-dot';
-            if (index === 0) dot.classList.add('active');
-            indicator.appendChild(dot);
-        });
+        const totalDots = this.stories.length + 1;
+        for (let i = 0; i < totalDots; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'story-dot';
+                if (i === 0) dot.classList.add('active');
+                indicator.appendChild(dot);
+            }
     }
 
     setupNextButton() {
         const nextButton = document.getElementById('nextButton');
         if (!nextButton) return;
         
+        const totalSlides = this.stories.length + 1;
         nextButton.addEventListener('click', () => {
-            if (this.currentStory < this.stories.length - 1) {
+            if (this.currentStory < totalSlides - 1) {
                 this.currentStory++;
                 this.updateStory();
+                console.log(this.currentStory);
             } else {
+                this.scrollToPartySection();
                 console.log('Moving to next section...');
             }
         });
     }
 
     setupBackButton() {
-        const nextButton = document.getElementById('backButton');
-        if (!nextButton) return;
+        const backButton = document.getElementById('backButton');
+        if (!backButton) return;
         
-        nextButton.addEventListener('click', () => {
-            if (this.currentStory < this.stories.length - 1) {
-                this.currentStory--;
+        backButton.addEventListener('click', () => {
+            // If on last story and user clicks "Check it again", go to first story
+            if (this.currentStory === this.stories.length) {
+                this.currentStory = 1;
                 this.updateStory();
+                return;
+            }
+            
+            if (this.currentStory > 0) {
+                this.currentStory--;
+                if (this.currentStory === 0) {
+                    this.showPlaceholder();
+                } else {
+                    this.updateStory();
+                }
             } else {
-                console.log('Moving to next section...');
+                console.log('Already at first story...');
             }
         });
+    }
+
+    showPlaceholder() {
+        document.getElementById('storyTitle').textContent = "Once upon a time...";
+        document.getElementById('storyText').textContent = "Once upon a time, there was a little one whose birthdays were filled with wonder and magic. Are you ready to discover the enchanting tale of my growing years? Let's turn the page and begin! 🎂";
+        document.getElementById('storyImage').src = "https://ik.imagekit.io/e3wiv79bq/header-image-Photoroom.png?updatedAt=1758197452989";
+        
+        const backButton = document.getElementById('backButton');
+        if (backButton) {
+            this.updateBackButton(backButton);
+        }
+        
+        this.updateIndicators();
     }
 
     updateStory() {
@@ -457,12 +490,12 @@ class StoryBook {
         elements.storyCard.classList.add('turning');
 
         setTimeout(() => {
-            const story = this.stories[this.currentStory];
+            const story = this.stories[this.currentStory - 1];
             
             elements.storyTitle.textContent = story.title;
             
             // Use cached image
-            const cachedImg = this.imageCache.get(this.currentStory);
+            const cachedImg = this.imageCache.get(this.currentStory - 1);
             if (cachedImg) {
                 elements.storyImage.src = cachedImg.src;
             } else {
@@ -489,41 +522,48 @@ class StoryBook {
     }
 
     updateNextButton(button) {
-        const isLastStory = this.currentStory === this.stories.length - 1;
+        const totalSlides = this.stories.length + 1; // +1 for placeholder
+        const isLastStory = this.currentStory === totalSlides - 1;
         button.innerHTML = isLastStory 
-            ? `Continue to Party! <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`
+            ? `Party Time! <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`
             : `Next <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`;
-        
-        if (isLastStory) {
-            const eventSection = document.getElementById('event-details')
-            eventSection.classList.add('visible');
-            eventSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            const dressSection = document.getElementById('dress-code')
-            dressSection.classList.add('visible');
-
-            const rsvpSection = document.getElementById('rsvp-section')
-            rsvpSection.classList.add('visible');
-
-            const guestSection = document.getElementById('guest-list-section')
-            guestSection.classList.add('visible');
-
-            const footerSection = document.getElementById('footer-section')
-            footerSection.classList.add('visible');
-        }
-
     }
 
     updateBackButton(button) {
-        const isLastStory = this.currentStory === this.stories.length - 1;
-        button.innerHTML = isLastStory 
-            ? `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Check it again`
-            : `<svg  xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Back`;
+        const isFirstSlide = this.currentStory === 0;
+        const isLastStory = this.currentStory === this.stories.length;
         
-        if (isLastStory) {
-            this.currentStory = 0;
+        // hide the back button
+        if (isFirstSlide) {
+            button.style.opacity = '0';
+            return; 
         }
 
+        button.style.opacity = '1';
+        
+        button.innerHTML = isLastStory 
+            ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Replay`
+            : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Back`;
+    }
+
+    scrollToPartySection() {
+        const eventSection = document.getElementById('event-details');
+        eventSection.classList.add('visible');
+        eventSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const dressSection = document.getElementById('dress-code');
+        dressSection.classList.add('visible');
+
+        const rsvpSection = document.getElementById('rsvp-section');
+        rsvpSection.classList.add('visible');
+
+        const guestSection = document.getElementById('guest-list-section');
+        guestSection.classList.add('visible');
+
+        const footerSection = document.getElementById('footer-section');
+        footerSection.classList.add('visible');
+        
+        // console.log('Moving to party section...');
     }
 
     setupIntersectionObserver() {
@@ -593,7 +633,7 @@ class EventDetailsManager {
                 title: this.eventDetails.title,
                 start: this.eventDetails.start,
                 end: this.eventDetails.end,
-                backgroundColor: '#FF2D95',
+                backgroundColor: 'transparent',
                 borderColor: '#FF2D95',
                 textColor: '#FFFFFF'
             }],

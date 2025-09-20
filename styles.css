@@ -490,6 +490,7 @@ html {
     margin: 0 auto;
     overflow: hidden;
     /* box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); */
+    animation: gentle-bounce 3s ease-in-out infinite;
 }
 
 .story-image {
@@ -672,6 +673,10 @@ html {
     transform: scale(1.2);
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* ===================================
    EVENT DETAILS SECTION
    =================================== */
@@ -734,6 +739,7 @@ html {
 .event-section-icon {
     color: var(--color-white);
     flex-shrink: 0;
+    animation: gentle-bounce 3s ease-in-out infinite;
 }
 
 .event-section-header h2 {
@@ -777,6 +783,32 @@ html {
 
 .fc .fc-daygrid-day-number {
     color: var(--color-primary);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.fc .fc-daygrid-day {
+    position: relative;
+}
+
+.fc .fc-daygrid-day-frame {
+    position: relative;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-number,
+.fc .fc-daygrid-day[data-date*="2025-11-02"] .fc-daygrid-day-number {
+    color: white !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
 }
 
 .fc .fc-toolbar-title {
@@ -789,17 +821,33 @@ html {
 }
 
 .fc-event {
-    background: var(--color-secondary);
-    border: none;
+    background: var(--color-secondary) !important;
+    border: 3px solid var(--color-secondary) !important;
     border-radius: 50% !important;
-    width: 30px !important;
-    height: 30px !important;
-    min-height: 20px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
     padding: 0 !important;
-    margin: 2px auto !important;
+    margin: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -40%) !important;
+    z-index: 5;
+}
+
+.fc-event.filled {
+    background: var(--color-secondary) !important;
+    border: none !important;
+    opacity: 0.3;
+}
+
+.fc .fc-daygrid-day-events {
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .fc-event-title {
@@ -999,6 +1047,7 @@ html {
     transition: all 0.3s ease;
     position: relative;
     z-index: 1;
+    animation: gentle-bounce 3s ease-in-out infinite;
 }
 
 .color-circle:first-child {
