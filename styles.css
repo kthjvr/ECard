@@ -678,6 +678,187 @@ html {
 }
 
 /* ===================================
+    STORYBOOK SECTION
+    =================================== */
+
+#gallery-section {
+    display: none;
+}
+
+#gallery-section.visible {
+    display: block;
+}
+
+.gallery-section {
+    padding: 0;
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.gallery-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Cover Image*/
+.gallery-cover {
+    position: relative;
+    overflow: hidden;
+    height: 70vh;
+}
+
+.gallery-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.gallery-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 55%, rgba(26, 10, 42, 0) 0%, rgba(26, 10, 42, 1) 90%);
+}
+
+/* Title */
+.gallery-title {
+    padding: 40px 180px;
+    color: var(--color-white);
+    margin-top: -6rem;
+    z-index: 1;
+    position: relative;
+}
+
+.child-name {
+    font-family: var(--font-header);
+    font-size: 3rem;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 10px;
+    font-style: italic;
+    text-align: start;
+}
+
+.turning-text {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 10px;
+    text-align: end;
+    font-weight: lighter;
+    margin-top: -2rem;
+    margin-right: 5rem;
+}
+
+.age-number {
+    font-family: var(--font-header);
+    font-size: 9rem;
+    font-weight: bold;
+    display: block;
+    text-align: end;
+    font-style: italic;
+    margin-top: -8rem;
+    color: var(--color-primary);
+}
+
+/* Gallery Carousel */
+.gallery-carousel-container {
+    padding: 0 20px 40px;
+}
+
+.carousel-wrapper {
+    position: relative;
+}
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.3s ease;
+}
+
+.carousel-slide {
+    min-width: 100%;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.carousel-nav:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-nav svg {
+    width: 20px;
+    height: 20px;
+    color: #333;
+}
+
+.carousel-nav.prev {
+    left: 10px;
+}
+
+.carousel-nav.next {
+    right: 10px;
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.indicator-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--color-white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator-dot.active {
+    background: var(--color-secondary);
+    transform: scale(1.2);
+}
+
+.indicator-dot:hover {
+    background: var(--color-secondary);
+}
+
+
+/* ===================================
    EVENT DETAILS SECTION
    =================================== */
 
@@ -689,7 +870,7 @@ html {
     display: none;
 }
 
-#event-details.visible{
+#event-details.visible {
     display: block;
 }
 
@@ -967,7 +1148,7 @@ html {
     z-index: 1;
 }
 
-#dress-code.visible{
+#dress-code.visible {
     display: block;
 }
 
@@ -1202,7 +1383,7 @@ html {
     justify-content: center;
 }
 
-#rsvp-section.visible{
+#rsvp-section.visible {
     display: flex;
 }
 
@@ -1348,7 +1529,7 @@ html {
     justify-content: center;
 }
 
-#guest-list-section.visible{
+#guest-list-section.visible {
     display: flex;
 }
 
@@ -1637,11 +1818,11 @@ footer {
     overflow: hidden;
 }
 
-#footer-section{
+#footer-section {
     display: none;
 }
 
-#footer-section.visible{
+#footer-section.visible {
     display: block;
 }
 
@@ -1843,7 +2024,7 @@ footer::before {
     gap: 8px;
     cursor: pointer;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
-    transition: all  0.3s ease;
+    transition: all 0.3s ease;
     font-family: inherit;
     font-weight: 500;
     border: 2px solid vrgba(255, 46, 146, 0.4);
@@ -1859,7 +2040,7 @@ footer::before {
 }
 
 .music-btn.playing {
-    background: var(--color-primary);
+    background: var(--color-tertiary);
     color: var(--color-white);
     box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
 }
@@ -2103,31 +2284,31 @@ footer::before {
     0% {
         opacity: 1;
         transform: scale(1);
-        background-image: linear-gradient(45deg, 
-            transparent 30%, 
-            rgba(255, 255, 255, 0.1) 50%, 
-            transparent 70%);
+        background-image: linear-gradient(45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%);
         background-position: -100% 0;
         filter: brightness(1);
     }
-    
+
     25% {
         background-position: 0% 0;
         filter: brightness(1.2);
     }
-    
+
     50% {
         opacity: 0;
         transform: scale(1.1);
         background-position: 100% 0;
         filter: brightness(1.5) blur(2px);
     }
-    
+
     75% {
         background-position: 200% 0;
         filter: brightness(1.2);
     }
-    
+
     100% {
         opacity: 1;
         transform: scale(1);
@@ -2137,14 +2318,16 @@ footer::before {
 }
 
 @keyframes twinkle {
-    0%, 100% { 
-        opacity: 0; 
-        transform: scale(0.5); 
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
     }
-    
-    50% { 
-        opacity: 1; 
-        transform: scale(1.2); 
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
     }
 }
 
@@ -2295,7 +2478,7 @@ footer::before {
         margin-bottom: 30px;
     }
 
-    .letter{
+    .letter {
         font-size: 14px;
     }
 
@@ -2360,6 +2543,20 @@ footer::before {
 
     .back-button {
         font-size: 16px;
+    }
+
+    /* gallery */
+    .child-name {
+        font-size: 2.5rem;
+        letter-spacing: 2px;
+    }
+
+    .age-number {
+        font-size: 6rem;
+    }
+
+    .turning-text {
+        font-size: 2rem;
     }
 
     /* Event Details */
@@ -2626,6 +2823,29 @@ footer::before {
     .back-button {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;
+    }
+
+    /* gallery */
+    .gallery-carousel-container {
+        padding: 0 10px 40px;
+    }
+
+    .gallery-title {
+        padding: 40px 35px;
+    }
+
+    .child-name {
+        font-size: 2.5rem;
+        letter-spacing: 1px;
+    }
+
+    .turning-text {
+        text-align: center;
+        margin-right: 0;
+    }
+
+    .age-number {
+        font-size: 9rem;
     }
 
     /* Event Details */

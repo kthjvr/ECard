@@ -7,26 +7,26 @@ class LoadingScreen {
         this.loadingScreen = document.getElementById('loadingScreen');
         this.spinner = this.loadingScreen?.querySelector('.spinner');
         this.loadingText = this.loadingScreen?.querySelector('p');
-        
+
         this.isLoaded = false;
         this.minimumLoadTime = 2000;
         this.loadStartTime = Date.now();
         this.currentMessageIndex = 0;
-        
+
         this.messages = [
             "Preparing a surprise...",
             "Setting up the party...",
             "Adding magical touches...",
             "Almost ready!"
         ];
-        
+
         this.init();
     }
 
     init() {
         this.preloadResources();
         this.startMessageCycle();
-        
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.onDOMReady());
             window.addEventListener('load', () => this.onWindowLoad());
@@ -70,7 +70,7 @@ class LoadingScreen {
 
     updateLoadingMessage(message) {
         if (!this.loadingText) return;
-        
+
         this.loadingText.style.opacity = '0';
         this.loadingText.style.transform = 'translateY(-10px)';
 
@@ -89,7 +89,7 @@ class LoadingScreen {
         console.log('Window loaded');
         const loadTime = Date.now() - this.loadStartTime;
         const remainingTime = Math.max(0, this.minimumLoadTime - loadTime);
-        
+
         setTimeout(() => this.hideLoadingScreen(), remainingTime);
     }
 
@@ -97,13 +97,13 @@ class LoadingScreen {
         if (!this.loadingScreen || this.isLoaded) return;
 
         this.isLoaded = true;
-        
+
         if (this.messageInterval) {
             clearInterval(this.messageInterval);
         }
 
         this.loadingScreen.classList.add('loading-complete');
-        
+
         if (this.loadingText) {
             this.updateLoadingMessage('Welcome to the party! 🎉');
         }
@@ -121,7 +121,7 @@ class LoadingScreen {
 
     onLoadingComplete() {
         console.log('Loading complete - initializing app');
-        
+
         if (typeof confetti !== 'undefined') {
             setTimeout(() => {
                 confetti({
@@ -184,19 +184,19 @@ class GuestListManager {
         this.guestListContent = document.getElementById('guestListContent');
         this.guestCards = document.querySelectorAll('.guest-card');
         this.thankYouMessage = document.getElementById('thankYouMessage');
-        
+
         // Debug logging
         // console.log('=== ELEMENT SELECTION DEBUG ===');
         // console.log('Check button found:', !!this.checkGuestBtn);
         // console.log('Content found:', !!this.guestListContent);
         // console.log('Cards found:', this.guestCards.length);
         // console.log('Thank you message found:', !!this.thankYouMessage);
-        
+
         if (!this.checkGuestBtn || !this.guestListContent) {
             console.error('Critical elements not found!');
             return;
         }
-        
+
         this.init();
     }
 
@@ -211,7 +211,7 @@ class GuestListManager {
 
         this.checkGuestBtn.addEventListener('click', () => {
             this.guestListContent.classList.toggle('show');
-            
+
             if (this.guestListContent.classList.contains('show')) {
                 this.showGuestList();
             } else {
@@ -227,7 +227,7 @@ class GuestListManager {
         console.log('Button current HTML:', this.checkGuestBtn.innerHTML);
         console.log('Content current classes:', this.guestListContent.className);
         console.log('Content current display:', getComputedStyle(this.guestListContent).display);
-        
+
         // Update button text
         this.checkGuestBtn.innerHTML = `
             Hide Guest List
@@ -235,13 +235,13 @@ class GuestListManager {
                 <path d="m18 15-6-6-6 6"/>
             </svg>
         `;
-        
+
         // console.log('Button HTML after update:', this.checkGuestBtn.innerHTML); 
-        
+
         // Force display change
         this.guestListContent.style.display = 'block';
         console.log('Content display after force:', getComputedStyle(this.guestListContent).display);
-        
+
         setTimeout(() => {
             this.guestListContent.classList.add('visible');
             console.log('Added visible class. Classes now:', this.guestListContent.className);
@@ -267,7 +267,7 @@ class GuestListManager {
         this.guestCards.forEach((card, index) => {
             setTimeout(() => card.classList.add('visible'), index * 150);
         });
-        
+
         setTimeout(() => {
             this.thankYouMessage.classList.add('visible');
         }, this.guestCards.length * 150 + 200);
@@ -373,11 +373,11 @@ class StoryBook {
                 text: "Get your party hats on, grab the confetti, and let's make this next birthday the happiest one yet! 🥳"
             }
         ];
-        
+
         this.currentStory = 0;
         this.imageCache = new Map();
         this.init();
-        this.preloadImages();        
+        this.preloadImages();
     }
 
     init() {
@@ -409,21 +409,21 @@ class StoryBook {
     initializeIndicators() {
         const indicator = document.getElementById('storyIndicator');
         if (!indicator) return;
-        
+
         indicator.innerHTML = '';
         const totalDots = this.stories.length + 1;
         for (let i = 0; i < totalDots; i++) {
-                const dot = document.createElement('div');
-                dot.className = 'story-dot';
-                if (i === 0) dot.classList.add('active');
-                indicator.appendChild(dot);
-            }
+            const dot = document.createElement('div');
+            dot.className = 'story-dot';
+            if (i === 0) dot.classList.add('active');
+            indicator.appendChild(dot);
+        }
     }
 
     setupNextButton() {
         const nextButton = document.getElementById('nextButton');
         if (!nextButton) return;
-        
+
         const totalSlides = this.stories.length + 1;
         nextButton.addEventListener('click', () => {
             if (this.currentStory < totalSlides - 1) {
@@ -440,7 +440,7 @@ class StoryBook {
     setupBackButton() {
         const backButton = document.getElementById('backButton');
         if (!backButton) return;
-        
+
         backButton.addEventListener('click', () => {
             // If on last story and user clicks "Check it again", go to first story
             if (this.currentStory === this.stories.length) {
@@ -448,7 +448,7 @@ class StoryBook {
                 this.updateStory();
                 return;
             }
-            
+
             if (this.currentStory > 0) {
                 this.currentStory--;
                 if (this.currentStory === 0) {
@@ -466,12 +466,12 @@ class StoryBook {
         document.getElementById('storyTitle').textContent = "Once upon a time...";
         document.getElementById('storyText').textContent = "Once upon a time, there was a little one whose birthdays were filled with wonder and magic. Are you ready to discover the enchanting tale of my growing years? Let's turn the page and begin! 🎂";
         document.getElementById('storyImage').src = "https://ik.imagekit.io/e3wiv79bq/header-image-Photoroom.png?updatedAt=1758197452989";
-        
+
         const backButton = document.getElementById('backButton');
         if (backButton) {
             this.updateBackButton(backButton);
         }
-        
+
         this.updateIndicators();
     }
 
@@ -491,9 +491,9 @@ class StoryBook {
 
         setTimeout(() => {
             const story = this.stories[this.currentStory - 1];
-            
+
             elements.storyTitle.textContent = story.title;
-            
+
             // Use cached image
             const cachedImg = this.imageCache.get(this.currentStory - 1);
             if (cachedImg) {
@@ -501,7 +501,7 @@ class StoryBook {
             } else {
                 elements.storyImage.src = story.image;
             }
-            
+
             elements.storyImage.alt = `Story illustration ${this.currentStory + 1}`;
             elements.storyText.textContent = story.text;
             document.getElementById('story-section').scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -509,7 +509,7 @@ class StoryBook {
             this.updateIndicators();
             this.updateNextButton(elements.nextButton);
             this.updateBackButton(elements.backButton);
-            
+
             elements.storyCard.classList.remove('turning');
         }, 300);
     }
@@ -524,7 +524,7 @@ class StoryBook {
     updateNextButton(button) {
         const totalSlides = this.stories.length + 1; // +1 for placeholder
         const isLastStory = this.currentStory === totalSlides - 1;
-        button.innerHTML = isLastStory 
+        button.innerHTML = isLastStory
             ? `Party Time! <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`
             : `Next <svg  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-right"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`;
     }
@@ -532,24 +532,27 @@ class StoryBook {
     updateBackButton(button) {
         const isFirstSlide = this.currentStory === 0;
         const isLastStory = this.currentStory === this.stories.length;
-        
+
         // hide the back button
         if (isFirstSlide) {
             button.style.opacity = '0';
-            return; 
+            return;
         }
 
         button.style.opacity = '1';
-        
-        button.innerHTML = isLastStory 
+
+        button.innerHTML = isLastStory
             ? `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Replay`
             : `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-chevron-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg> Back`;
     }
 
     scrollToPartySection() {
+        const galerySection = document.getElementById('gallery-section');
+        galerySection.classList.add('visible');
+        galerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
         const eventSection = document.getElementById('event-details');
         eventSection.classList.add('visible');
-        eventSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         const dressSection = document.getElementById('dress-code');
         dressSection.classList.add('visible');
@@ -562,7 +565,7 @@ class StoryBook {
 
         const footerSection = document.getElementById('footer-section');
         footerSection.classList.add('visible');
-        
+
         // console.log('Moving to party section...');
     }
 
@@ -581,6 +584,120 @@ class StoryBook {
 }
 
 // =============================================================================
+// GALLERY MODULE
+// =============================================================================
+class GalleryCarousel {
+    constructor() {
+        // Gallery images array
+        this.galleryImages = [
+            {
+                image: "/images/first.jpg",
+                alt: "First Birthday"
+            },
+            {
+                image: "/images/second.jpg",
+                alt: "Second Birthday"
+            },
+            {
+                image: "/images/third.jpg",
+                alt: "Third Birthday"
+            },
+            {
+                image: "/images/fourth.jpg",
+                alt: "Fourth Birthday"
+            },
+            {
+                image: "/images/fifth.jpg",
+                alt: "Fifth Birthday"
+            },
+            {
+                image: "/images/sixth.jpg",
+                alt: "Sixth Birthday"
+            }
+        ];
+
+        this.currentSlide = 0;
+        this.totalSlides = this.galleryImages.length;
+        this.track = document.getElementById('carouselTrack');
+        this.indicatorsContainer = document.getElementById('indicators');
+        this.prevBtn = document.getElementById('prevBtn');
+        this.nextBtn = document.getElementById('nextBtn');
+
+        this.init();
+    }
+
+    init() {
+        this.createSlides();
+        this.createIndicators();
+        this.bindEvents();
+        this.updateCarousel();
+
+        // Auto-play
+        setInterval(() => this.nextSlide(), 5000);
+    }
+
+    createSlides() {
+        this.track.innerHTML = '';
+        this.galleryImages.forEach((item, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'carousel-slide';
+            slide.innerHTML = `<img src="${item.image}" alt="${item.alt}">`;
+            this.track.appendChild(slide);
+        });
+    }
+
+    createIndicators() {
+        this.indicatorsContainer.innerHTML = '';
+        this.galleryImages.forEach((item, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'indicator-dot';
+            if (index === 0) dot.classList.add('active');
+            this.indicatorsContainer.appendChild(dot);
+        });
+        this.indicators = document.querySelectorAll('.indicator-dot');
+    }
+
+    bindEvents() {
+        this.prevBtn.addEventListener('click', () => this.prevSlide());
+        this.nextBtn.addEventListener('click', () => this.nextSlide());
+
+        this.indicators.forEach((dot, index) => {
+            dot.addEventListener('click', () => this.goToSlide(index));
+        });
+    }
+
+    updateCarousel() {
+        const translateX = -this.currentSlide * 100;
+        this.track.style.transform = `translateX(${translateX}%)`;
+
+        this.indicators.forEach((dot, index) => {
+            dot.classList.toggle('active', index === this.currentSlide);
+        });
+    }
+
+    nextSlide() {
+        this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+        this.updateCarousel();
+    }
+
+    prevSlide() {
+        this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+        this.updateCarousel();
+    }
+
+    goToSlide(index) {
+        this.currentSlide = index;
+        this.updateCarousel();
+    }
+}
+
+// Initialize carousel when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new GalleryCarousel();
+});
+
+
+// =============================================================================
 // EVENT DETAILS MODULE
 // =============================================================================
 
@@ -593,7 +710,7 @@ class EventDetailsManager {
             location: "Captain's Place (Private Pool and Events Place), 24XP+J63, Malvar, Batangas, Philippines",
             description: "Join us for an amazing birthday celebration with games, cake, and fun!"
         };
-        
+
         this.init();
     }
 
@@ -642,7 +759,7 @@ class EventDetailsManager {
                 alert(`🎉 ${info.event.title}\n📅 ${info.event.start.toLocaleDateString()}\n⏰ ${info.event.start.toLocaleTimeString()} - ${info.event.end.toLocaleTimeString()}`);
             }
         });
-        
+
         calendar.render();
         this.setupCalendarButton();
     }
@@ -721,7 +838,7 @@ class RSVPManager {
 
         const dressCodeSection = document.getElementById('dress-code');
         const rsvpSection = document.getElementById('rsvp-section');
-        
+
         if (dressCodeSection) dressCodeObserver.observe(dressCodeSection);
         if (rsvpSection) rsvpObserver.observe(rsvpSection);
     }
@@ -741,9 +858,9 @@ class EnvelopeManager {
         this.openSound = document.getElementById('openSound');
         this.nextButton = document.getElementById('nextButton');
         this.storyCard = document.getElementById('storyCard'),
-        this.isEnvelopeOpened = false;
+            this.isEnvelopeOpened = false;
         this.isAnimating = false;
-        
+
         this.init();
     }
 
@@ -760,7 +877,7 @@ class EnvelopeManager {
         this.isEnvelopeOpened = true;
 
         if (this.lid1) this.lid1.style.display = 'none';
-        
+
         this.envelope.style.pointerEvents = 'none';
         this.playSound(this.openSound);
         this.animateEnvelopeOpening();
@@ -768,7 +885,7 @@ class EnvelopeManager {
 
     animateEnvelopeOpening() {
         if (this.lid) this.lid.classList.add('open');
-        
+
         setTimeout(() => {
             if (this.letter) this.letter.classList.add('visible');
         }, 500);
@@ -778,7 +895,7 @@ class EnvelopeManager {
             if (window.musicManager) {
                 window.musicManager.startMusic();
             }
-            
+
             // Additional envelope opening effects can be added here
             this.isAnimating = false;
         }, 1200);
@@ -787,7 +904,7 @@ class EnvelopeManager {
             // show storybook
             this.storybook.classList.add('visible');
             this.smoothScrollToStorybook();
-        }, 2000) 
+        }, 2000)
     }
 
     playSound(audioElement) {
@@ -801,7 +918,7 @@ class EnvelopeManager {
     reset() {
         this.isEnvelopeOpened = false;
         this.isAnimating = false;
-        
+
         if (this.envelope) this.envelope.style.pointerEvents = 'auto';
         if (this.lid) this.lid.classList.remove('open');
         if (this.letter) this.letter.classList.remove('visible');
@@ -822,7 +939,7 @@ class MusicManager {
         this.musicBtn = document.getElementById('musicBtn');
         this.bgMusic = document.getElementById('bgMusic');
         this.isMusicPlaying = false;
-        
+
         this.init();
     }
 
@@ -911,12 +1028,12 @@ function initializeApp() {
     loadingScreen = new LoadingScreen();
     const envelopeManager = new EnvelopeManager();
     const musicManager = new MusicManager();
-    
+
     new GuestListManager();
     new StoryBook();
     new EventDetailsManager();
     new RSVPManager();
-    
+
     // Make managers globally accessible
     window.loadingScreen = loadingScreen;
     window.envelopeManager = envelopeManager;
