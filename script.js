@@ -633,7 +633,7 @@ class GalleryCarousel {
         this.updateCarousel();
 
         // Auto-play
-        setInterval(() => this.nextSlide(), 5000);
+        // setInterval(() => this.nextSlide(), 5000);
     }
 
     createSlides() {
