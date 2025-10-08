@@ -334,7 +334,7 @@ class StoryBook {
         this.stories = [
             {
                 title: "The Beginning of My Story 🌟",
-                image: "https://ik.imagekit.io/e3wiv79bq/cover.png?updatedAt=1757587967248",
+                image: "https://ik.imagekit.io/e3wiv79bq/header-image-Photoroom.png?updatedAt=1758197452989",
                 text: "Every great adventure starts with a single moment... and mine began the day I was born! This is where my birthday journey begins - a tale of growing up, making wishes, and celebrating the gift of another year around the sun!"
             },
             {
@@ -551,6 +551,9 @@ class StoryBook {
         galerySection.classList.add('visible');
         galerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+        const polaroidSection = document.getElementById('polaroid-section');
+        polaroidSection.classList.add('visible');
+
         const eventSection = document.getElementById('event-details');
         eventSection.classList.add('visible');
 
@@ -691,9 +694,103 @@ class GalleryCarousel {
     }
 }
 
+class PolaroidCarousel {
+    constructor(containerId, images) {
+    this.container = document.getElementById(containerId);
+    this.galleryImages = images;
+    this.polaroids = [];
+    this.isAnimating = false;
+    this.rotations = [-2, 1, -1, 0, 0];
+    
+    this.init();
+    }
+
+    init() {
+    this.createPolaroids();
+    this.updateStack();
+    this.container.addEventListener('click', () => this.handleClick());
+    }
+
+    createPolaroids() {
+    this.galleryImages.forEach((item, index) => {
+        const polaroid = document.createElement('div');
+        polaroid.className = 'polaroid';
+        polaroid.dataset.index = index;
+        
+        const img = document.createElement('img');
+        img.src = item.image;
+        img.alt = item.alt;
+        
+        // const caption = document.createElement('div');
+        // caption.className = 'caption';
+        // caption.textContent = item.alt;
+        
+        polaroid.appendChild(img);
+        // polaroid.appendChild(caption);
+        this.container.appendChild(polaroid);
+        
+        this.polaroids.push(polaroid);
+    });
+    }
+
+    updateStack() {
+    this.polaroids.forEach((polaroid, idx) => {
+        const offset = Math.min(idx * 4, 12);
+        const rotation = this.rotations[idx] || 0;
+        polaroid.style.transform = `translateY(${offset}px) rotate(${rotation}deg)`;
+        polaroid.style.zIndex = this.polaroids.length - idx;
+        polaroid.dataset.index = idx;
+    });
+    }
+
+    handleClick() {
+    if (this.isAnimating) return;
+    
+    this.isAnimating = true;
+    const firstPolaroid = this.polaroids[0];
+    
+    firstPolaroid.classList.add('animating');
+    
+    setTimeout(() => {
+        firstPolaroid.classList.remove('animating');
+        this.polaroids.push(this.polaroids.shift());
+        this.updateStack();
+        this.isAnimating = false;
+    }, 600);
+    }
+}
+
+const galleryImages = [
+      {
+        image: "/images/first.jpg",
+        alt: "First Birthday"
+      },
+      {
+        image: "/images/second.jpg",
+        alt: "Second Birthday"
+      },
+      {
+        image: "/images/third.jpg",
+        alt: "Third Birthday"
+      },
+      {
+        image: "/images/fourth.jpg",
+        alt: "Fourth Birthday"
+      },
+      {
+        image: "/images/fifth.jpg",
+        alt: "Fifth Birthday"
+      },
+      {
+        image: "/images/sixth.jpg",
+        alt: "Sixth Birthday"
+      }
+    ];
+
 // Initialize carousel when page loads
 document.addEventListener('DOMContentLoaded', () => {
     new GalleryCarousel();
+    new PolaroidCarousel('carousel', galleryImages);
 });
 
 
