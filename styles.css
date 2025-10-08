@@ -954,6 +954,28 @@ html {
     text-align: center;
 }
 
+.animated-details-polariod {
+    font-family: var(--font-header);
+    font-size: clamp(1rem, 1vw, 2rem);
+    color: var(--color-white);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    line-height: 1.2;
+    animation: title-glow 2s ease-in-out infinite alternate;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: -25%;
+}
+
+.animated-details-polariod svg {
+    animation: sparkle-rotate 3s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
 
 /* ===================================
    EVENT DETAILS SECTION
@@ -2707,7 +2729,7 @@ footer::before {
         font-size: 2rem;
     }
 
-    .animated-details{
+    .animated-details-polariod{
         margin-bottom: -45%;
     }
 
