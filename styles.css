@@ -1490,6 +1490,84 @@ html {
     text-align: center;
 }
 
+.dresscode-notes {
+  font-family: var(--font-body);
+  background: linear-gradient(135deg, rgba(155, 77, 255, 0.08) 0%, rgba(255, 45, 149, 0.08) 100%);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-card);
+  padding: var(--spacing-lg);
+  margin: var(--spacing-md) 0;
+  line-height: 1.6;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-slow);
+}
+
+.dresscode-notes::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: var(--radius-medium);
+  padding: 2px;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.5;
+  transition: opacity var(--transition-slow);
+}
+
+.dresscode-notes:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(155, 77, 255, 0.2);
+}
+
+.dresscode-notes:hover::before {
+  opacity: 1;
+}
+
+.dresscode-notes p {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--color-black);
+  padding: var(--spacing-sm);
+  position: relative;
+  border-radius: var(--radius-sm);
+  transition: background-color 0.3s ease;
+}
+
+.dresscode-notes p:not(:last-child) {
+  margin-bottom: var(--spacing-md);
+}
+
+.dresscode-notes p:first-child {
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.dresscode-notes p:last-child {
+  color: var(--color-primary);
+  font-weight: 500;
+}
+
+.dresscode-notes::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+  opacity: 0.6;
+}
+
+
 /* ===================================
            RSVP SECTION
     =================================== */
@@ -2257,8 +2335,6 @@ footer::before {
         transform: translateX(0);
     }
 }
-
-
 
 @keyframes spin {
     0% {
