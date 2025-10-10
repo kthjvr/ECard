@@ -339,32 +339,32 @@ class StoryBook {
             },
             {
                 title: "My First Birthday! 🎂",
-                image: "/images/first.jpg",
+                image: "/images/story/first.jpg",
                 text: "One year old and ready to explore!"
             },
             {
                 title: "Two Years of Wonder! 🎈🎈",
-                image: "/images/second.jpg",
+                image: "/images/story/second.jpg",
                 text: "Two candles dancing in the breeze! I'm getting bigger and learning so many new things every day."
             },
             {
                 title: "Three and Free! 🌟🌟🌟",
-                image: "/images/third.jpg",
+                image: "/images/story/third.jpg",
                 text: "Three years of adventures! I can run, jump, and play."
             },
             {
                 title: "Fantastic Four! 🚀🚀🚀🚀",
-                image: "/images/fourth.jpg",
+                image: "/images/story/fourth.jpg",
                 text: "Four candles glowing bright!"
             },
             {
                 title: "High Five for Five! 🖐️",
-                image: "/images/fifth.jpg",
+                image: "/images/story/fifth.jpg",
                 text: "Five years of growing and learning! I'm getting ready for big adventures and maybe even school soon!"
             },
             {
                 title: "Super Six! 🦋🦋🦋🦋🦋🦋",
-                image: "/images/sixth.jpg",
+                image: "/images/story/sixth.jpg",
                 text: "Six wonderful years of birthdays!"
             },
             {
@@ -587,36 +587,13 @@ class StoryBook {
 }
 
 // =============================================================================
-// GALLERY MODULE
+// GALLERY MODULE [NOT IN USE]
 // =============================================================================
 class GalleryCarousel {
     constructor() {
         // Gallery images array
         this.galleryImages = [
-            {
-                image: "/images/first.jpg",
-                alt: "First Birthday"
-            },
-            {
-                image: "/images/second.jpg",
-                alt: "Second Birthday"
-            },
-            {
-                image: "/images/third.jpg",
-                alt: "Third Birthday"
-            },
-            {
-                image: "/images/fourth.jpg",
-                alt: "Fourth Birthday"
-            },
-            {
-                image: "/images/fifth.jpg",
-                alt: "Fifth Birthday"
-            },
-            {
-                image: "/images/sixth.jpg",
-                alt: "Sixth Birthday"
-            }
+
         ];
 
         this.currentSlide = 0;
@@ -694,98 +671,109 @@ class GalleryCarousel {
     }
 }
 
+// =============================================================================
+// PLOAROID MODULE
+// =============================================================================
 class PolaroidCarousel {
     constructor(containerId, images) {
-    this.container = document.getElementById(containerId);
-    this.galleryImages = images;
-    this.polaroids = [];
-    this.isAnimating = false;
-    this.rotations = [-2, 1, -1, 0, 0];
-    
-    this.init();
+        this.container = document.getElementById(containerId);
+        this.galleryImages = images;
+        this.polaroids = [];
+        this.isAnimating = false;
+        this.rotations = [-2, 1, -1, 0, 0];
+
+        this.init();
     }
 
     init() {
-    this.createPolaroids();
-    this.updateStack();
-    this.container.addEventListener('click', () => this.handleClick());
+        this.createPolaroids();
+        this.updateStack();
+        this.container.addEventListener('click', () => this.handleClick());
     }
 
     createPolaroids() {
-    this.galleryImages.forEach((item, index) => {
-        const polaroid = document.createElement('div');
-        polaroid.className = 'polaroid';
-        polaroid.dataset.index = index;
-        
-        const img = document.createElement('img');
-        img.src = item.image;
-        img.alt = item.alt;
-        
-        // const caption = document.createElement('div');
-        // caption.className = 'caption';
-        // caption.textContent = item.alt;
-        
-        polaroid.appendChild(img);
-        // polaroid.appendChild(caption);
-        this.container.appendChild(polaroid);
-        
-        this.polaroids.push(polaroid);
-    });
+        this.galleryImages.forEach((item, index) => {
+            const polaroid = document.createElement('div');
+            polaroid.className = 'polaroid';
+            polaroid.dataset.index = index;
+
+            const img = document.createElement('img');
+            img.src = item.image;
+            img.alt = item.alt;
+
+            // const caption = document.createElement('div');
+            // caption.className = 'caption';
+            // caption.textContent = item.alt;
+
+            polaroid.appendChild(img);
+            // polaroid.appendChild(caption);
+            this.container.appendChild(polaroid);
+
+            this.polaroids.push(polaroid);
+        });
     }
 
     updateStack() {
-    this.polaroids.forEach((polaroid, idx) => {
-        const offset = Math.min(idx * 4, 12);
-        const rotation = this.rotations[idx] || 0;
-        polaroid.style.transform = `translateY(${offset}px) rotate(${rotation}deg)`;
-        polaroid.style.zIndex = this.polaroids.length - idx;
-        polaroid.dataset.index = idx;
-    });
+        this.polaroids.forEach((polaroid, idx) => {
+            const offset = Math.min(idx * 4, 12);
+            const rotation = this.rotations[idx] || 0;
+            polaroid.style.transform = `translateY(${offset}px) rotate(${rotation}deg)`;
+            polaroid.style.zIndex = this.polaroids.length - idx;
+            polaroid.dataset.index = idx;
+        });
     }
 
     handleClick() {
-    if (this.isAnimating) return;
-    
-    this.isAnimating = true;
-    const firstPolaroid = this.polaroids[0];
-    
-    firstPolaroid.classList.add('animating');
-    
-    setTimeout(() => {
-        firstPolaroid.classList.remove('animating');
-        this.polaroids.push(this.polaroids.shift());
-        this.updateStack();
-        this.isAnimating = false;
-    }, 600);
+        if (this.isAnimating) return;
+
+        this.isAnimating = true;
+        const firstPolaroid = this.polaroids[0];
+
+        firstPolaroid.classList.add('animating');
+
+        setTimeout(() => {
+            firstPolaroid.classList.remove('animating');
+            this.polaroids.push(this.polaroids.shift());
+            this.updateStack();
+            this.isAnimating = false;
+        }, 600);
     }
 }
 
 const galleryImages = [
-      {
-        image: "/images/first.jpg",
+    {
+        image: "/images/gallery/Gallery 1.jpg",
         alt: "First Birthday"
-      },
-      {
-        image: "/images/second.jpg",
+    },
+    {
+        image: "/images/gallery/Gallery 2.jpg",
         alt: "Second Birthday"
-      },
-      {
-        image: "/images/third.jpg",
+    },
+    {
+        image: "/images/gallery/Gallery 3.jpg",
         alt: "Third Birthday"
-      },
-      {
-        image: "/images/fourth.jpg",
+    },
+    {
+        image: "/images/gallery/Gallery 4.jpg",
         alt: "Fourth Birthday"
-      },
-      {
-        image: "/images/fifth.jpg",
+    },
+    {
+        image: "/images/gallery/Gallery 5.jpg",
         alt: "Fifth Birthday"
-      },
-      {
-        image: "/images/sixth.jpg",
+    },
+    {
+        image: "/images/gallery/Gallery 6.jpg",
         alt: "Sixth Birthday"
-      }
-    ];
+    },
+    {
+        image: "/images/gallery/Gallery 7.jpg",
+        alt: "Fifth Birthday"
+    },
+    {
+        image: "/images/gallery/Gallery 8.jpg",
+        alt: "Sixth Birthday"
+    }
+];
 
 // Initialize carousel when page loads
 document.addEventListener('DOMContentLoaded', () => {
