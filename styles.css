@@ -53,6 +53,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -924,7 +926,10 @@ background:
     background: white;
     padding: 1rem;
     padding-bottom: 4rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    0 16px 48px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(255, 45, 149, 0.25);
     transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -2820,7 +2825,7 @@ footer::before {
 
     /* gallery */
     .gallery-cover img {
-        object-position: 70% center
+        object-position: 80% center
     }
 
     .child-name {
@@ -2841,7 +2846,7 @@ footer::before {
     }
 
     .polaroid-section {
-        margin-bottom: -45%;
+        margin-bottom: -24%;
     }
 
     /* Event Details */
