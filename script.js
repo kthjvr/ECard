@@ -7,6 +7,7 @@ class LoadingScreen {
         this.loadingScreen = document.getElementById('loadingScreen');
         this.spinner = this.loadingScreen?.querySelector('.spinner');
         this.loadingText = this.loadingScreen?.querySelector('p');
+        this.openSound = document.getElementById('openSound');
 
         this.isLoaded = false;
         this.minimumLoadTime = 2000;
@@ -34,6 +35,7 @@ class LoadingScreen {
             this.onDOMReady();
             if (document.readyState === 'complete') {
                 this.onWindowLoad();
+                this.playSound(this.openSound);
             } else {
                 window.addEventListener('load', () => this.onWindowLoad());
             }
@@ -121,6 +123,10 @@ class LoadingScreen {
 
     onLoadingComplete() {
         console.log('Loading complete - initializing app');
+        // Start music when envelope opens
+        if (window.musicManager) {
+            window.musicManager.startMusic();
+        }
 
         if (typeof confetti !== 'undefined') {
             setTimeout(() => {
@@ -171,6 +177,14 @@ class LoadingScreen {
 
     forceHide() {
         this.hideLoadingScreen();
+    }
+
+    playSound(audioElement) {
+        if (audioElement) {
+            audioElement.play().catch(() => {
+                console.log('Audio play failed - user interaction required');
+            });
+        }
     }
 }
 
@@ -772,6 +786,22 @@ const galleryImages = [
     {
         image: "/images/gallery/Gallery 8.jpg",
         alt: "Sixth Birthday"
+    },
+    {
+        image: "/images/gallery/Gallery 9.jpg",
+        alt: "Fifth Birthday"
+    },
+    {
+        image: "/images/gallery/Gallery 10.jpg",
+        alt: "Sixth Birthday"
+    },
+    {
+        image: "/images/gallery/Gallery 11.jpg",
+        alt: "Fifth Birthday"
+    },
+    {
+        image: "/images/gallery/Gallery 12.jpg",
+        alt: "Sixth Birthday"
     }
 ];
 
@@ -940,10 +970,9 @@ class EnvelopeManager {
         this.lid1 = document.getElementById('lid1');
         this.letter = document.getElementById('letter');
         this.storybook = document.getElementById('story-section');
-        this.openSound = document.getElementById('openSound');
         this.nextButton = document.getElementById('nextButton');
         this.storyCard = document.getElementById('storyCard'),
-            this.isEnvelopeOpened = false;
+        this.isEnvelopeOpened = false;
         this.isAnimating = false;
 
         this.init();
@@ -964,7 +993,6 @@ class EnvelopeManager {
         if (this.lid1) this.lid1.style.display = 'none';
 
         this.envelope.style.pointerEvents = 'none';
-        this.playSound(this.openSound);
         this.animateEnvelopeOpening();
     }
 
@@ -976,11 +1004,6 @@ class EnvelopeManager {
         }, 500);
 
         setTimeout(() => {
-            // Start music when envelope opens
-            if (window.musicManager) {
-                window.musicManager.startMusic();
-            }
-
             // Additional envelope opening effects can be added here
             this.isAnimating = false;
         }, 1200);
@@ -990,14 +1013,6 @@ class EnvelopeManager {
             this.storybook.classList.add('visible');
             this.smoothScrollToStorybook();
         }, 2000)
-    }
-
-    playSound(audioElement) {
-        if (audioElement) {
-            audioElement.play().catch(() => {
-                console.log('Audio play failed - user interaction required');
-            });
-        }
     }
 
     reset() {
