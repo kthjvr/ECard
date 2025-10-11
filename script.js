@@ -4,12 +4,16 @@
 
 class LoadingScreen {
     constructor() {
+        this.introScreen = document.getElementById('introScreen');
+        this.sealButton = document.getElementById('sealButton');
         this.loadingScreen = document.getElementById('loadingScreen');
         this.spinner = this.loadingScreen?.querySelector('.spinner');
         this.loadingText = this.loadingScreen?.querySelector('p');
+        this.mainContent = document.getElementById('mainContent');
         this.isLoaded = false;
-        this.minimumLoadTime = 2000;
-        this.loadStartTime = Date.now();
+        this.resourcesLoaded = false;
+        this.minimumLoadTime = 3000;
+        this.loadStartTime = null;
         this.currentMessageIndex = 0;
         this.messages = [
             "Preparing a surprise...",
@@ -22,19 +26,46 @@ class LoadingScreen {
     }
 
     init() {
-        this.preloadResources();
-        this.startMessageCycle();
+        this.sealButton.addEventListener('click', () => this.onSealButtonClick());
+    }
 
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.onDOMReady());
-            window.addEventListener('load', () => this.onWindowLoad());
-        } else {
-            this.onDOMReady();
-            if (document.readyState === 'complete') {
-                this.onWindowLoad();
-            } else {
-                window.addEventListener('load', () => this.onWindowLoad());
+    onSealButtonClick() {
+        // Fade out intro screen
+        this.introScreen.classList.add('hidden');
+        this.loadingScreen.style.display = 'flex';
+
+        setTimeout(() => {
+            if (window.musicManager) {
+                window.musicManager.startMusic();
             }
+        }, 200);
+        
+        setTimeout(() => {
+            this.loadingScreen.classList.add('active');
+            this.loadStartTime = Date.now();
+            this.startLoading();
+        }, 100);
+        
+        // Remove intro screen from DOM after fade completes
+        setTimeout(() => {
+            this.introScreen.style.display = 'none';
+        }, 800);
+    }
+
+    startLoading() {
+        this.startMessageCycle();
+        this.preloadResources();
+    }
+
+    checkLoadingComplete() {
+        const loadTime = Date.now() - this.loadStartTime;
+        const remainingTime = Math.max(0, this.minimumLoadTime - loadTime);
+
+        // Wait for both minimum time AND resources to be loaded
+        if (this.resourcesLoaded && loadTime >= this.minimumLoadTime) {
+            this.hideLoadingScreen();
+        } else {
+            setTimeout(() => this.checkLoadingComplete(), remainingTime);
         }
     }
 
@@ -47,13 +78,23 @@ class LoadingScreen {
         const promises = imagesToPreload.map(src => {
             return new Promise((resolve) => {
                 const img = new Image();
-                img.onload = resolve;
-                img.onerror = resolve;
+                img.onload = () => {
+                    console.log('Loaded:', src);
+                    resolve();
+                };
+                img.onerror = () => {
+                    console.warn('Failed to load:', src);
+                    resolve();
+                };
                 img.src = src;
             });
         });
 
-        Promise.all(promises).then(() => console.log('Images preloaded'));
+        Promise.all(promises).then(() => {
+            console.log('All resources preloaded');
+            this.resourcesLoaded = true;
+            this.checkLoadingComplete();
+        });
     }
 
     startMessageCycle() {
@@ -79,12 +120,7 @@ class LoadingScreen {
         }, 300);
     }
 
-    onDOMReady() {
-        console.log('DOM ready');
-    }
-
     onWindowLoad() {
-        console.log('Window loaded');
         const loadTime = Date.now() - this.loadStartTime;
         const remainingTime = Math.max(0, this.minimumLoadTime - loadTime);
 
@@ -109,27 +145,20 @@ class LoadingScreen {
         setTimeout(() => {
             this.loadingScreen.classList.add('fade-out');
             setTimeout(() => {
-                if (this.loadingScreen.parentNode) {
-                    this.loadingScreen.style.display = 'none';
-                }
+                this.loadingScreen.style.display = 'none';
+                this.mainContent.style.display = 'block';
+                setTimeout(() => {
+                    this.mainContent.classList.add('visible');
+                }, 50);
+                
                 this.onLoadingComplete();
             }, 800);
         }, 1000);
     }
 
     onLoadingComplete() {
-        console.log('Loading complete - initializing app');
-
-        if (typeof confetti !== 'undefined') {
-            setTimeout(() => {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#9B4DFF', '#FF2D95', '#4BC9FF', '#FFD700']
-                });
-            }, 500);
-        }
+        console.log('Loading complete - ready!');
+        document.body.style.background = 'linear-gradient(135deg, #1a0a2e 0%, #16213e 100%)';
 
         this.initializeApp();
     }
@@ -990,12 +1019,6 @@ class EnvelopeManager {
         }, 500);
 
         setTimeout(() => {
-            // Start music when envelope opens
-            if (window.musicManager) {
-                window.musicManager.startMusic();
-            }
-
-            // Additional envelope opening effects can be added here
             this.isAnimating = false;
         }, 1200);
 
